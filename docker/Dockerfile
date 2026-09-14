@@ -21,7 +21,7 @@ FROM python:3.12-slim
 ARG VERSION=0.0.0
 LABEL org.opencontainers.image.title="Looop Price Warehouse" \
       org.opencontainers.image.description="Warehouse collector for Looop Denki electricity price data" \
-      org.opencontainers.image.source="https://github.com/aayusharyan/looop-price-data" \
+      org.opencontainers.image.source="https://github.com/aayusharyan/looop-price-warehouse" \
       org.opencontainers.image.version="${VERSION}"
 
 RUN groupadd --system --gid 10001 collector \
@@ -46,5 +46,5 @@ ENV PATH="/opt/venv/bin:$PATH" \
     COLLECT_ON_START=true
 
 VOLUME ["/app/data", "/app/raw-cache"]
-ENTRYPOINT ["looop-collector"]
+ENTRYPOINT ["looop-price-collector"]
 CMD ["serve"]
