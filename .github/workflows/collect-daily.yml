@@ -1,4 +1,5 @@
-# Run the published collector daily and version any resulting JSON snapshot.
+# Run the published collector daily and commit whatever changed under data and
+# raw-cache, including raw responses the collector pruned or refreshed.
 name: Collect daily prices
 
 on:
