@@ -1,0 +1,41 @@
+# Validate Python behavior and the production image before changes are merged.
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v5
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install and test
+        run: |
+          python -m pip install ".[test,postgres]"
+          pytest
+
+  image:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v5
+
+      - name: Build image
+        run: docker build --tag looop-price-data:test .
+
+      - name: Verify command
+        run: docker run --rm looop-price-data:test --help
