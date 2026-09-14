@@ -115,7 +115,7 @@ The database holds one row per area and period, with the charge updated in place
 
 The daily workflow runs the published container at 16:15 JST and again at 17:15 JST, because Looop publishes tomorrow's prices "around 16:00" without committing to an exact minute and GitHub may delay or skip a scheduled run. The second run costs nothing when the first succeeded, since an unchanged day is not rewritten. Each run mounts this repository's `data` and `raw-cache` directories, cross-validates while collecting, and commits only what changed. It can also be started manually. Repository Actions need `contents: write`; protected branches must permit the workflow's commit or use a dedicated data branch.
 
-Collection failures do not produce a commit. The workflow concurrency setting also prevents overlapping daily runs. A failed validation step still keeps the collected data so the disagreement can be inspected.
+A correction fails the workflow run. When an incoming charge disagrees with a date already stored, the collector logs the details, writes the newer value, and exits with code `2` under `--fail-on-correction`. The run still commits the corrected files first and only then fails, so the disagreement is preserved in git rather than lost to a red build. Any other failure, such as an unreachable source, exits non-zero immediately and produces no commit. The workflow concurrency setting also prevents overlapping runs.
 
 
 ## Development
