@@ -1,0 +1,75 @@
+# Run the published collector daily and version any resulting JSON snapshot.
+name: Collect daily prices
+
+on:
+  schedule:
+    # Cron is always UTC and Japan is UTC+9 all year. Looop publishes tomorrow's
+    # prices "around 16:00" JST without committing to a minute, so collect at
+    # 16:15 JST and again at 17:15 JST in case the first run is late or skipped.
+    - cron: "15 7 * * *"
+    - cron: "15 8 * * *"
+  workflow_dispatch:
+
+concurrency:
+  group: daily-price-collection
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+  packages: read
+
+jobs:
+  collect:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out warehouse
+        uses: actions/checkout@v5
+
+      - name: Sign in to GHCR
+        uses: docker/login-action@v4
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      # Exit code 2 means already published prices were corrected. The corrected
+      # files are on disk, so the job continues to the commit and fails later.
+      - name: Collect into the repository
+        id: collect
+        run: |
+          docker pull "ghcr.io/${GITHUB_REPOSITORY}:latest"
+          set +e
+          docker run --rm \
+            --user "$(id -u):$(id -g)" \
+            --env JSON_DATA_DIR=/app/data \
+            --env RAW_CACHE_DIR=/app/raw-cache \
+            --volume "$PWD/data:/app/data" \
+            --volume "$PWD/raw-cache:/app/raw-cache" \
+            "ghcr.io/${GITHUB_REPOSITORY}:latest" collect --fail-on-correction
+          collect_status=$?
+          set -e
+          echo "status=${collect_status}" >> "$GITHUB_OUTPUT"
+          if [ "$collect_status" -ne 0 ] && [ "$collect_status" -ne 2 ]; then
+            exit "$collect_status"
+          fi
+
+      - name: Commit changed warehouse files
+        run: |
+          git config user.name "Aayush Sinha"
+          git config user.email "hello@yush.dev"
+          git add --all data raw-cache
+          if git diff --cached --quiet; then
+            echo "The source data is unchanged."
+            exit 0
+          fi
+          git commit -m "data: collect prices for $(date -u +%F)"
+          git pull --rebase origin "${GITHUB_REF_NAME}"
+          git push
+
+      - name: Fail when published prices were corrected
+        if: steps.collect.outputs.status == '2'
+        run: |
+          echo "::error::Prices already published for an earlier date changed." \
+            "The files were updated and committed; review the collection log."
+          exit 1
+
