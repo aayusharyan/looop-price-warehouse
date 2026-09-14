@@ -1,0 +1,64 @@
+# Example for self-hosting the scheduled collector together with its own
+# PostgreSQL server. Nothing in this repository runs it; copy it to
+# docker-compose.yml or pass it with -f, since Compose ignores this filename.
+# Context is the repository root; bind mounts point at that same root's data dirs.
+name: looop-price-warehouse
+
+services:
+  collector:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    image: ghcr.io/aayusharyan/looop-price-warehouse:latest
+    user: "${COLLECTOR_UID:-1000}:${COLLECTOR_GID:-1000}"
+    restart: unless-stopped
+    # Waiting for the health check below keeps the collection that runs at
+    # startup from failing while the server is still accepting no connections.
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      LOOOP_AREA_CODES: "${LOOOP_AREA_CODES:-01,02,03,04,05,06,07,08,09,10}"
+      JSON_STORAGE_ENABLED: "${JSON_STORAGE_ENABLED:-true}"
+      JSON_DATA_DIR: /app/data
+      RAW_CACHE_ENABLED: "${RAW_CACHE_ENABLED:-true}"
+      RAW_CACHE_DIR: /app/raw-cache
+      RAW_CACHE_MAX_FILES: "${RAW_CACHE_MAX_FILES:-10}"
+      COLLECT_SCHEDULE: "${COLLECT_SCHEDULE:-16:15,17:15}"
+      COLLECT_ON_START: "${COLLECT_ON_START:-true}"
+      # The role and database below are created by the server on first start, so
+      # the collector connects straight to them and never has to create either.
+      # Setting DATABASE_URL points storage at an existing server instead.
+      DATABASE_URL: "${DATABASE_URL:-postgresql+psycopg://looop:${POSTGRES_PASSWORD:-password}@postgres:5432/looop}"
+    volumes:
+      - ../data:/app/data
+      - ../raw-cache:/app/raw-cache
+
+  # Remove this service when an existing PostgreSQL server is available, and
+  # drop the depends_on block above with it.
+  postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: looop
+      POSTGRES_USER: looop
+      # Replace the fallback before running this anywhere but a private machine.
+      POSTGRES_PASSWORD: "${POSTGRES_PASSWORD:-password}"
+    # Compose reports the container healthy only once the server answers queries,
+    # which happens later than the container starting.
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U looop -d looop"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    # No port is published, so only the collector reaches the server. Uncomment
+    # to inspect the data with a client on the host.
+    # ports:
+    #   - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+
+# A named volume keeps the stored prices across recreating the container.
+volumes:
+  postgres-data:
