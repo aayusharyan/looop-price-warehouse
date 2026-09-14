@@ -26,6 +26,30 @@ pip install -e .
 looop-collector collect
 ```
 
+## Running modes
+
+The container has two modes, because a long-lived host and a CI runner need opposite behaviour.
+
+`serve` is the default command. It stays running, collects once at startup, then repeats at each scheduled time, so `docker run` alone is enough to keep a warehouse current. The schedule is evaluated in Japan Standard Time regardless of the host clock. A failed collection is logged and the schedule continues, and `SIGTERM` stops the container immediately rather than after the current wait:
+
+```bash
+docker run -d --restart unless-stopped \
+  --user "$(id -u):$(id -g)" \
+  -v "$PWD/data:/app/data" \
+  -v "$PWD/raw-cache:/app/raw-cache" \
+  ghcr.io/aayusharyan/looop-price-data:latest
+```
+
+`collect` runs a single collection and exits, which is what an external scheduler such as the GitHub Action uses:
+
+```bash
+docker run --rm \
+  --user "$(id -u):$(id -g)" \
+  -v "$PWD/data:/app/data" \
+  -v "$PWD/raw-cache:/app/raw-cache" \
+  ghcr.io/aayusharyan/looop-price-data:latest collect
+```
+
 
 ## What gets stored
 
@@ -80,7 +104,9 @@ Environment variables:
 - `RAW_CACHE_ENABLED` enables the rolling raw cache; default: `true`.
 - `RAW_CACHE_DIR` selects its root folder; default: `./raw-cache`.
 - `RAW_CACHE_MAX_FILES` caps the cached responses per area; default: `10`.
-- `DATABASE_URL` enables SQL storage when set; it has no default.
+- `COLLECT_SCHEDULE` sets the `serve` times in JST; default: `16:15,17:15`.
+- `COLLECT_ON_START` collects once when `serve` starts; default: `true`.
+- `DATABASE_URL` enables PostgreSQL storage when set; it has no default.
 - `LOOOP_API_URL` overrides the upstream endpoint.
 - `HTTP_TIMEOUT_SECONDS` controls the request timeout; default: `20`.
 
@@ -108,12 +134,16 @@ looop-collector collect
 looop-collector latest --storage database
 ```
 
-The database holds one row per area and period, with the charge updated in place when the source revises it. Disabling the files without setting `DATABASE_URL` is rejected to prevent a successful-looking run that stores nothing; the raw cache alone does not count, since it is pruned. SQLite URLs remain supported for small local experiments.
+The database holds one row per area and period, with the charge updated in place when the source revises it. Disabling the files without setting `DATABASE_URL` is rejected to prevent a successful-looking run that stores nothing; the raw cache alone does not count, since it is pruned.
+
+PostgreSQL is the only supported SQL destination, and a URL for any other backend is rejected before the first fetch rather than halfway through storage. Nothing has to be prepared by hand: the first collection creates the database when the server does not have it yet, then creates the `prices` table. Creating the database needs a role with `CREATEDB`, and the URL's credentials must also reach the `postgres` maintenance database; when the database already exists neither is required. A `prices` table that exists without the columns the collector writes ends the run with an error instead of a partial write.
 
 
 ## Automated collection
 
-The daily workflow runs the published container at 16:15 JST and again at 17:15 JST, because Looop publishes tomorrow's prices "around 16:00" without committing to an exact minute and GitHub may delay or skip a scheduled run. The second run costs nothing when the first succeeded, since an unchanged day is not rewritten. Each run mounts this repository's `data` and `raw-cache` directories, cross-validates while collecting, and commits only what changed. It can also be started manually. Repository Actions need `contents: write`; protected branches must permit the workflow's commit or use a dedicated data branch.
+The daily workflow pulls `ghcr.io/aayusharyan/looop-price-data:latest`, the released image that a self-hosted collector runs too, so collection exercises the deployed artifact and a broken release shows up in this repository's own data first. Collection tracks published releases, not `main`, so a merge takes effect here only once a release is cut.
+
+The workflow runs that container at 16:15 JST and again at 17:15 JST, because Looop publishes tomorrow's prices "around 16:00" without committing to an exact minute and GitHub may delay or skip a scheduled run. The second run costs nothing when the first succeeded, since an unchanged day is not rewritten. Each run mounts this repository's `data` and `raw-cache` directories, cross-validates while collecting, and commits only what changed. It can also be started manually. Repository Actions need `contents: write`; protected branches must permit the workflow's commit or use a dedicated data branch.
 
 A correction fails the workflow run. When an incoming charge disagrees with a date already stored, the collector logs the details, writes the newer value, and exits with code `2` under `--fail-on-correction`. The run still commits the corrected files first and only then fails, so the disagreement is preserved in git rather than lost to a red build. Any other failure, such as an unreachable source, exits non-zero immediately and produces no commit. The workflow concurrency setting also prevents overlapping runs.
 
@@ -123,7 +153,14 @@ A correction fails the workflow run. When an incoming charge disagrees with a da
 ```bash
 pip install -e '.[test,postgres]'
 pytest
-docker build -t looop-price-data .
+docker build -f docker/Dockerfile -t looop-price-data .
+```
+
+The PostgreSQL tests need a server and are skipped without one. They drop and recreate the database named in the URL, so point them at a throwaway database:
+
+```bash
+docker run -d --rm --name looop-pg -e POSTGRES_PASSWORD=password -p 5432:5432 postgres:16-alpine
+LOOOP_TEST_DATABASE_URL='postgresql+psycopg://postgres:password@127.0.0.1:5432/looop_test' pytest
 ```
 
 This warehouse preserves prices; consumers remain responsible for caching, access control, presentation, notifications, and business logic.
