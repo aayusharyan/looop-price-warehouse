@@ -1,0 +1,11 @@
+# Keep development and generated data out of reproducible image builds.
+.git
+.github
+.venv
+__pycache__
+*.py[cod]
+.pytest_cache
+*.egg-info
+data
+raw-cache
+src/tests
