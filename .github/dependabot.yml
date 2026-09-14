@@ -13,8 +13,8 @@ updates:
     schedule:
       interval: weekly
 
-  # Tracks the python:3.12-slim tags in the root Dockerfile.
+  # Tracks the python:3.12-slim tags in docker/Dockerfile.
   - package-ecosystem: docker
-    directory: /
+    directory: /docker
     schedule:
       interval: weekly
