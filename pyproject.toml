@@ -5,7 +5,6 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "looop-price-warehouse"
-version = "0.1.0"
 description = "Warehouse collector for Looop Denki electricity price data."
 readme = "README.md"
 requires-python = ">=3.11"
@@ -15,6 +14,12 @@ dependencies = [
   "httpx>=0.27,<1",
   "SQLAlchemy>=2.0,<3",
 ]
+dynamic = ["version"]
+
+# Releases only bump major or minor, so the patch component stays 0. The single
+# source of truth is __version__, which the image build stamps from the tag.
+[tool.setuptools.dynamic]
+version = { attr = "looop_price_collector.__version__" }
 
 [project.optional-dependencies]
 postgres = ["psycopg[binary]>=3.2,<4"]
