@@ -17,7 +17,8 @@ dependencies = [
 dynamic = ["version"]
 
 # Releases only bump major or minor, so the patch component stays 0. The single
-# source of truth is __version__, which the image build stamps from the tag.
+# source of truth is __version__, which the release workflow rewrites and commits
+# before building the image.
 [tool.setuptools.dynamic]
 version = { attr = "looop_price_collector.__version__" }
 
@@ -26,7 +27,7 @@ postgres = ["psycopg[binary]>=3.2,<4"]
 test = ["pytest>=8,<9"]
 
 [project.scripts]
-looop-collector = "looop_price_collector.cli:main"
+looop-price-collector = "looop_price_collector.cli:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]
