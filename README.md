@@ -94,11 +94,11 @@ A price file is a list of half-hour periods and nothing else:
 
 The newest ten per area are cached in `raw-cache/`, which exists only to validate the collector and to preserve details the price files drop, such as the flags separating "tomorrow is not published yet" from "tomorrow failed to parse". Anything older is deleted automatically.
 
-Inspect the newest stored periods. `--limit` counts half-hour periods back from the latest one stored, so `48` is a day and `96` is two; it defaults to 48 periods of the first configured area. Once tomorrow's prices are published this shows tomorrow, not the past day:
+`display` prints stored periods. `--limit` counts half-hour periods back from the newest start time, so `48` is a day and `96` is two; it defaults to 48 periods of the first configured area. Once tomorrow's prices are published this shows tomorrow, not the past day:
 
 ```bash
-looop-price-collector latest
-looop-price-collector latest --area 03 --limit 96
+looop-price-collector display
+looop-price-collector display --area 03 --limit 96
 ```
 
 
@@ -144,7 +144,7 @@ Use PostgreSQL only:
 export JSON_STORAGE_ENABLED=false
 export DATABASE_URL='postgresql+psycopg://looop:password@localhost/looop'
 looop-price-collector collect
-looop-price-collector latest --storage database
+looop-price-collector display --storage database
 ```
 
 The database holds one row per area and period, with the charge updated in place when the source revises it. Its `valid_from`, `valid_to`, and `observed_at` columns are `timestamptz` and therefore hold UTC, so a period the JSON files show as `2026-09-15T00:00:00+09:00` appears as `2026-09-14 15:00:00+00` in a direct query; the collector's own reads convert it back to Japan Standard Time. Disabling the files without setting `DATABASE_URL` is rejected to prevent a successful-looking run that stores nothing; the raw cache alone does not count, since it is pruned.
