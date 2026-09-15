@@ -10,6 +10,8 @@ from zoneinfo import ZoneInfo
 
 import httpx
 
+# Every datetime leaving this module is aware and set to Japan Standard Time,
+# which is the zone the source publishes its prices in.
 JST = ZoneInfo("Asia/Tokyo")
 SLOTS_PER_DAY = 48
 SLOT_MINUTES = 30
