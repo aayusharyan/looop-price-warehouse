@@ -14,11 +14,11 @@ from sqlalchemy.engine import URL
 from looop_price_collector import db, service
 from looop_price_collector.config import Config
 from looop_price_collector.db import (
-    latest_from_database,
     parse_database_url,
     store_in_database,
+    stored_from_database,
 )
-from looop_price_collector.json_store import latest_prices, store_prices
+from looop_price_collector.json_store import store_prices, stored_prices
 from looop_price_collector.raw_cache import cached_paths, store_raw
 
 JST = ZoneInfo("Asia/Tokyo")
@@ -79,7 +79,7 @@ def test_price_file_holds_only_from_to_and_charge(tmp_path: Path) -> None:
     ]
     assert "raw" not in document
     assert (tmp_path / "area-03/README.md").exists()
-    assert latest_prices(tmp_path, "03", 1)[0]["charge"] == 12.3
+    assert stored_prices(tmp_path, "03", 1)[0]["charge"] == 12.3
 
 
 def test_price_file_is_rewritten_only_when_charges_change(tmp_path: Path) -> None:
@@ -190,7 +190,7 @@ def test_database_url_alone_creates_database_and_table(database_url: str) -> Non
     engine.dispose()
     assert result["inserted"] == 1
     assert columns.issuperset({"area_code", "valid_from", "charge", "observed_at"})
-    assert latest_from_database(database_url, "03", 1)[0]["charge"] == 12.3
+    assert stored_from_database(database_url, "03", 1)[0]["charge"] == 12.3
 
 
 def test_database_updates_a_revised_charge(database_url: str, monkeypatch) -> None:
@@ -226,7 +226,7 @@ def test_incompatible_existing_table_is_reported(database_url: str) -> None:
     engine.dispose()
 
     with pytest.raises(RuntimeError, match="area_code"):
-        latest_from_database(database_url, "03", 1)
+        stored_from_database(database_url, "03", 1)
 
 
 def test_collection_corrects_today_then_stores_tomorrow(
