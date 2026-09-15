@@ -1,5 +1,6 @@
 # Run the published collector daily and commit whatever changed under data and
-# raw-cache, including raw responses the collector pruned or refreshed.
+# raw-cache, including raw responses the collector pruned or refreshed. After
+# collection, refresh the README warehouse-size badge from the first area dir.
 name: Collect daily prices
 
 on:
@@ -73,4 +74,39 @@ jobs:
           echo "::error::Prices already published for an earlier date changed." \
             "The files were updated and committed; review the collection log."
           exit 1
+
+  # Count JSON files in the first area directory and rewrite the warehouse-size
+  # badge. Runs after collect even when that job failed on a correction, because
+  # those files were already committed. Checkout uses the branch name so this
+  # clone includes the collect job's push rather than the workflow's start SHA.
+  update-days-badge:
+    needs: collect
+    if: ${{ !cancelled() && (success() || failure()) }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out warehouse
+        uses: actions/checkout@v5
+        with:
+          ref: ${{ github.ref_name }}
+
+      - name: Update warehouse size badge
+        run: |
+          area_dir=$(find data -maxdepth 1 -type d -name 'area-*' | sort | head -n 1)
+          if [ -z "$area_dir" ]; then
+            echo "No area directory found."
+            exit 0
+          fi
+          days=$(find "$area_dir" -maxdepth 1 -name '*.json' | wc -l | tr -d ' ')
+          echo "Counted ${days} day files in ${area_dir}."
+          sed -i -E "s#(img.shields.io/badge/Warehouse%20Size-)[0-9]+(%20days-informational)#\\1${days}\\2#" README.md
+          git config user.name "Aayush Sinha"
+          git config user.email "hello@yush.dev"
+          git add README.md
+          if git diff --cached --quiet; then
+            echo "The warehouse size badge is unchanged."
+            exit 0
+          fi
+          git commit -m "docs: set warehouse size badge to ${days} days"
+          git pull --rebase origin "${GITHUB_REF_NAME}"
+          git push
 
