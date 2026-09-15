@@ -1,5 +1,9 @@
 # Looop Price Warehouse
 
+[![CI](https://img.shields.io/github/actions/workflow/status/aayusharyan/looop-price-warehouse/ci.yml?branch=main&label=CI)](https://github.com/aayusharyan/looop-price-warehouse/actions/workflows/ci.yml)
+[![Daily collection](https://img.shields.io/github/actions/workflow/status/aayusharyan/looop-price-warehouse/collect-daily.yml?label=daily%20collection)](https://github.com/aayusharyan/looop-price-warehouse/actions/workflows/collect-daily.yml)
+[![Warehouse Size](https://img.shields.io/badge/Warehouse%20Size-2%20days-informational)](https://github.com/aayusharyan/looop-price-warehouse/tree/main/data)
+
 This repository is a data warehouse: it fetches Looop Denki Smart Time ONE 30-minute prices and stores them as plain daily files. It is deliberately not an API, dashboard, alerting service, or integration platform. Other applications should read the stored files or connect independently to the configured database.
 
 The collector requests all ten regions from Looop's undocumented JSON endpoint, using `https://looop-denki.com/api/prices?select_area=<code>`. The source may change without notice.
