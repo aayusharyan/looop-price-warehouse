@@ -8,6 +8,13 @@ This repository is a data warehouse: it fetches Looop Denki Smart Time ONE 30-mi
 
 The collector requests all ten regions from Looop's undocumented JSON endpoint, using `https://looop-denki.com/api/prices?select_area=<code>`. The source may change without notice.
 
+## Finding the prices
+
+You do not need to run this project to use the warehouse. Open the [`data/`](data/) directory. That is the published archive: one folder per region, one file per day.
+
+The area table (which folder is Tokyo, Kansai, and so on) is in [`data/README.md`](data/README.md), along with the file layout. Pick your region, then open a `YYYY-MM-DD.json` file for the delivery day you care about. Each file is a list of 30-minute periods with a `charge` in yen per kWh. Times are Japan Standard Time.
+
+GitHub shows those files in the browser. You can also download a single day, clone the repository, or browse older days in the commit history of `data/`. The [`raw-cache/`](raw-cache/) folder is not the public archive; it only keeps a short window of source responses for the collector.
 
 ## Quick start
 
