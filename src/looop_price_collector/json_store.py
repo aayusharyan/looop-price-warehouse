@@ -21,8 +21,8 @@ One file per delivery day, named by the Japan Standard Time date its prices appl
 
 Every entry in `prices` is one half-hour period:
 
-- `from`: start of the period
-- `to`: end of the period
+- `from`: start of the period, in Japan Standard Time (`+09:00`)
+- `to`: end of the period, in the same zone
 - `charge`: price in JPY per kWh
 
 Each file contains only that date's periods. A later collection checks its values against the existing file and replaces it if the source revised a charge.
@@ -60,7 +60,12 @@ def write_area_readme(data_dir: Path, area_code: str, source_url: str) -> None:
 
 
 def _serialize(periods: list[dict[str, Any]]) -> list[dict[str, Any]]:
-    """Render periods as portable ISO 8601 strings with a plain charge."""
+    """Render periods as portable ISO 8601 strings with a plain charge.
+
+    The periods arrive in Japan Standard Time and are written with that offset,
+    as in `2026-09-15T00:00:00+09:00`, so each timestamp reads as the local
+    delivery time named by the file. SQL storage keeps the same instants in UTC.
+    """
     return [
         {
             "from": period["from"].isoformat(),
