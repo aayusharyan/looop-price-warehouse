@@ -25,7 +25,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check out warehouse
-        uses: actions/checkout@v5
+        uses: actions/checkout@v7
 
       - name: Sign in to GHCR
         uses: docker/login-action@v4
@@ -85,7 +85,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check out warehouse
-        uses: actions/checkout@v5
+        uses: actions/checkout@v7
         with:
           ref: ${{ github.ref_name }}
 
