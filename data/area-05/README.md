@@ -6,8 +6,8 @@ One file per delivery day, named by the Japan Standard Time date its prices appl
 
 Every entry in `prices` is one half-hour period:
 
-- `from`: start of the period
-- `to`: end of the period
+- `from`: start of the period, in Japan Standard Time (`+09:00`)
+- `to`: end of the period, in the same zone
 - `charge`: price in JPY per kWh
 
 Each file contains only that date's periods. A later collection checks its values against the existing file and replaces it if the source revised a charge.
