@@ -24,7 +24,7 @@ version = { attr = "looop_price_collector.__version__" }
 
 [project.optional-dependencies]
 postgres = ["psycopg[binary]>=3.2,<4"]
-test = ["pytest>=8,<9"]
+test = ["pytest>=8,<10"]
 
 [project.scripts]
 looop-price-collector = "looop_price_collector.cli:main"
