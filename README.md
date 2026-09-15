@@ -69,7 +69,6 @@ docker run --rm \
   ghcr.io/aayusharyan/looop-price-warehouse:latest collect
 ```
 
-
 ## What gets stored
 
 The published archive is [`data/`](data/). The [area table](data/README.md#area-table) lists every region. Each area gets a directory holding its own README and one file per delivery day:
@@ -92,7 +91,11 @@ A price file is a list of half-hour periods and nothing else:
   "fetched_at": "2026-09-15T01:37:12+09:00",
   "source": "https://looop-denki.com/api/prices?select_area=03",
   "prices": [
-    { "from": "2026-09-15T00:00:00+09:00", "to": "2026-09-15T00:30:00+09:00", "charge": 27.51 }
+    {
+      "from": "2026-09-15T00:00:00+09:00",
+      "to": "2026-09-15T00:30:00+09:00",
+      "charge": 27.51
+    }
   ]
 }
 ```
@@ -108,11 +111,9 @@ looop-price-collector display
 looop-price-collector display --area 03 --limit 96
 ```
 
-
 ## Published days and cross-validation
 
 One response carries up to three delivery days: yesterday, today, and tomorrow. They are split into three independently named files. Tomorrow's prices appear around 16:00 JST, so a collection made before then creates or updates only yesterday and today. The `days` field in the result shows what arrived. Cross-validation happens during every collection. Before replacing an existing date, the collector compares every incoming charge with the file already on disk. If they differ, it logs an error identifying the area, date, and number of changed periods, then replaces the file because the latest response is the new truth. Processing continues, so tomorrow's newly published file is still stored. The machine-readable result includes the individual differences under `stores.data.corrections`.
-
 
 ## Storage configuration
 
@@ -158,7 +159,6 @@ The database holds one row per area and period, with the charge updated in place
 
 PostgreSQL is the only supported SQL destination, and a URL for any other backend is rejected before the first fetch rather than halfway through storage. Nothing has to be prepared by hand: the first collection creates the database when the server does not have it yet, then creates the `prices` table. Creating the database needs a role with `CREATEDB`, and the URL's credentials must also reach the `postgres` maintenance database; when the database already exists neither is required. A `prices` table that exists without the columns the collector writes ends the run with an error instead of a partial write.
 
-
 ## Automated collection
 
 The daily workflow pulls `ghcr.io/aayusharyan/looop-price-warehouse:latest`, the released image that a self-hosted collector runs too, so collection exercises the deployed artifact and a broken release shows up in this repository's own data first. Collection tracks published releases, not `main`, so a merge takes effect here only once a release is cut.
@@ -166,7 +166,6 @@ The daily workflow pulls `ghcr.io/aayusharyan/looop-price-warehouse:latest`, the
 The workflow runs that container at 16:15 JST and again at 17:15 JST, because Looop publishes tomorrow's prices "around 16:00" without committing to an exact minute and GitHub may delay or skip a scheduled run. The second run costs nothing when the first succeeded, since an unchanged day is not rewritten. Each run mounts this repository's `data` and `raw-cache` directories, cross-validates while collecting, and commits only what changed. It can also be started manually. Repository Actions need `contents: write`; protected branches must permit the workflow's commit or use a dedicated data branch.
 
 A correction fails the workflow run. When an incoming charge disagrees with a date already stored, the collector logs the details, writes the newer value, and exits with code `2` under `--fail-on-correction`. The run still commits the corrected files first and only then fails, so the disagreement is preserved in git rather than lost to a red build. Any other failure, such as an unreachable source, exits non-zero immediately and produces no commit. The workflow concurrency setting also prevents overlapping runs.
-
 
 ## Development
 
