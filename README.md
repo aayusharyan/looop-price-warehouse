@@ -14,7 +14,7 @@ docker run --rm \
   --user "$(id -u):$(id -g)" \
   -v "$PWD/data:/app/data" \
   -v "$PWD/raw-cache:/app/raw-cache" \
-  ghcr.io/aayusharyan/looop-price-data:latest
+  ghcr.io/aayusharyan/looop-price-warehouse:latest
 ```
 
 Or run from source:
@@ -23,8 +23,16 @@ Or run from source:
 python -m venv .venv
 source .venv/bin/activate
 pip install -e .
-looop-collector collect
+looop-price-collector collect
 ```
+
+For a self-hosted warehouse that already includes PostgreSQL, use [`docker/docker-compose.example.yaml`](docker/docker-compose.example.yaml). Compose ignores that filename, so pass `-f` (or copy it to `docker-compose.yml`). From the repository root:
+
+```bash
+docker compose -f docker/docker-compose.example.yaml up -d
+```
+
+That starts the scheduled collector and a Postgres 16 server, writes daily files under `data/` and `raw-cache/`, and stores prices in the database as well. Set `POSTGRES_PASSWORD` before using it anywhere but a private machine. Remove the `postgres` service and its `depends_on` block when you already have a server, and point `DATABASE_URL` at it instead. Uncomment the published port if you need a client on the host to reach the bundled server.
 
 ## Running modes
 
@@ -37,7 +45,7 @@ docker run -d --restart unless-stopped \
   --user "$(id -u):$(id -g)" \
   -v "$PWD/data:/app/data" \
   -v "$PWD/raw-cache:/app/raw-cache" \
-  ghcr.io/aayusharyan/looop-price-data:latest
+  ghcr.io/aayusharyan/looop-price-warehouse:latest
 ```
 
 `collect` runs a single collection and exits, which is what an external scheduler such as the GitHub Action uses:
@@ -47,7 +55,7 @@ docker run --rm \
   --user "$(id -u):$(id -g)" \
   -v "$PWD/data:/app/data" \
   -v "$PWD/raw-cache:/app/raw-cache" \
-  ghcr.io/aayusharyan/looop-price-data:latest collect
+  ghcr.io/aayusharyan/looop-price-warehouse:latest collect
 ```
 
 
@@ -82,10 +90,11 @@ A price file is a list of half-hour periods and nothing else:
 
 The newest ten per area are cached in `raw-cache/`, which exists only to validate the collector and to preserve details the price files drop, such as the flags separating "tomorrow is not published yet" from "tomorrow failed to parse". Anything older is deleted automatically.
 
-Inspect the newest stored periods:
+Inspect the newest stored periods. `--limit` counts half-hour periods back from the latest one stored, so `48` is a day and `96` is two; it defaults to 48 periods of the first configured area. Once tomorrow's prices are published this shows tomorrow, not the past day:
 
 ```bash
-looop-collector latest --limit 48
+looop-price-collector latest
+looop-price-collector latest --area 03 --limit 96
 ```
 
 
@@ -113,16 +122,16 @@ Environment variables:
 Collect only selected regions:
 
 ```bash
-LOOOP_AREA_CODES=01,03 looop-collector collect
+LOOOP_AREA_CODES=01,03 looop-price-collector collect
 # Command-line selections override the environment for this invocation.
-looop-collector collect --area 01 --area 03
+looop-price-collector collect --area 01 --area 03
 ```
 
 Enable PostgreSQL while keeping JSON:
 
 ```bash
 export DATABASE_URL='postgresql+psycopg://looop:password@localhost/looop'
-looop-collector collect
+looop-price-collector collect
 ```
 
 Use PostgreSQL only:
@@ -130,18 +139,18 @@ Use PostgreSQL only:
 ```bash
 export JSON_STORAGE_ENABLED=false
 export DATABASE_URL='postgresql+psycopg://looop:password@localhost/looop'
-looop-collector collect
-looop-collector latest --storage database
+looop-price-collector collect
+looop-price-collector latest --storage database
 ```
 
-The database holds one row per area and period, with the charge updated in place when the source revises it. Disabling the files without setting `DATABASE_URL` is rejected to prevent a successful-looking run that stores nothing; the raw cache alone does not count, since it is pruned.
+The database holds one row per area and period, with the charge updated in place when the source revises it. Its `valid_from`, `valid_to`, and `observed_at` columns are `timestamptz` and therefore hold UTC, so a period the JSON files show as `2026-09-15T00:00:00+09:00` appears as `2026-09-14 15:00:00+00` in a direct query; the collector's own reads convert it back to Japan Standard Time. Disabling the files without setting `DATABASE_URL` is rejected to prevent a successful-looking run that stores nothing; the raw cache alone does not count, since it is pruned.
 
 PostgreSQL is the only supported SQL destination, and a URL for any other backend is rejected before the first fetch rather than halfway through storage. Nothing has to be prepared by hand: the first collection creates the database when the server does not have it yet, then creates the `prices` table. Creating the database needs a role with `CREATEDB`, and the URL's credentials must also reach the `postgres` maintenance database; when the database already exists neither is required. A `prices` table that exists without the columns the collector writes ends the run with an error instead of a partial write.
 
 
 ## Automated collection
 
-The daily workflow pulls `ghcr.io/aayusharyan/looop-price-data:latest`, the released image that a self-hosted collector runs too, so collection exercises the deployed artifact and a broken release shows up in this repository's own data first. Collection tracks published releases, not `main`, so a merge takes effect here only once a release is cut.
+The daily workflow pulls `ghcr.io/aayusharyan/looop-price-warehouse:latest`, the released image that a self-hosted collector runs too, so collection exercises the deployed artifact and a broken release shows up in this repository's own data first. Collection tracks published releases, not `main`, so a merge takes effect here only once a release is cut.
 
 The workflow runs that container at 16:15 JST and again at 17:15 JST, because Looop publishes tomorrow's prices "around 16:00" without committing to an exact minute and GitHub may delay or skip a scheduled run. The second run costs nothing when the first succeeded, since an unchanged day is not rewritten. Each run mounts this repository's `data` and `raw-cache` directories, cross-validates while collecting, and commits only what changed. It can also be started manually. Repository Actions need `contents: write`; protected branches must permit the workflow's commit or use a dedicated data branch.
 
@@ -153,7 +162,7 @@ A correction fails the workflow run. When an incoming charge disagrees with a da
 ```bash
 pip install -e '.[test,postgres]'
 pytest
-docker build -f docker/Dockerfile -t looop-price-data .
+docker build -f docker/Dockerfile -t looop-price-warehouse .
 ```
 
 The PostgreSQL tests need a server and are skipped without one. They drop and recreate the database named in the URL, so point them at a throwaway database:
