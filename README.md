@@ -12,7 +12,7 @@ The collector requests all ten regions from Looop's undocumented JSON endpoint, 
 
 You do not need to run this project to use the warehouse. Open the [`data/`](data/) directory. That is the published archive: one folder per region, one file per day.
 
-The area table (which folder is Tokyo, Kansai, and so on) is in [`data/README.md`](data/README.md), along with the file layout. Pick your region, then open a `YYYY-MM-DD.json` file for the delivery day you care about. Each file is a list of 30-minute periods with a `charge` in yen per kWh. Times are Japan Standard Time.
+The [area table](data/README.md#area-table) in [`data/README.md`](data/README.md) maps each folder to a region and to the name Looop uses (Tokyo is `area-03`, 東京電力エリア). Pick your region, then open a `YYYY-MM-DD.json` file for the delivery day you care about. Each file is a list of 30-minute periods with a `charge` in yen per kWh. Times are Japan Standard Time.
 
 GitHub shows those files in the browser. You can also download a single day, clone the repository, or browse older days in the commit history of `data/`. The [`raw-cache/`](raw-cache/) folder is not the public archive; it only keeps a short window of source responses for the collector.
 
@@ -72,7 +72,7 @@ docker run --rm \
 
 ## What gets stored
 
-Each area gets a directory holding its own README and one file per delivery day:
+The published archive is [`data/`](data/). The [area table](data/README.md#area-table) lists every region. Each area gets a directory holding its own README and one file per delivery day:
 
 ```
 data/
