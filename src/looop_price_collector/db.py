@@ -180,7 +180,7 @@ def store_in_database(
     }
 
 
-def latest_from_database(
+def stored_from_database(
     database_url: str, area_code: str, limit: int
 ) -> list[dict[str, Any]]:
     """Return the newest stored periods in chronological order."""

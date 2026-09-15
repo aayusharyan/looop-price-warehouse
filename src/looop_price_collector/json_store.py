@@ -210,7 +210,7 @@ def load_price_files(data_dir: Path, area_code: str) -> list[dict[str, Any]]:
     return documents
 
 
-def latest_prices(data_dir: Path, area_code: str, limit: int) -> list[dict[str, Any]]:
+def stored_prices(data_dir: Path, area_code: str, limit: int) -> list[dict[str, Any]]:
     """Return the most recently published charge for the newest periods."""
     by_period: dict[str, dict[str, Any]] = {}
 

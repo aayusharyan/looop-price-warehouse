@@ -10,8 +10,8 @@ from typing import Any
 
 from .areas import ALL_AREA_CODES
 from .config import Config
-from .db import latest_from_database
-from .json_store import latest_prices
+from .db import stored_from_database
+from .json_store import stored_prices
 from .scheduler import serve
 from .service import collect
 
@@ -56,8 +56,8 @@ def command_serve(_: argparse.Namespace) -> None:
     serve(config.schedule, run_once, config.collect_on_start, stop_event)
 
 
-def command_latest(args: argparse.Namespace) -> None:
-    """Print the newest stored periods from the selected destination."""
+def command_display(args: argparse.Namespace) -> None:
+    """Print stored periods from the selected destination."""
     config = Config()
     config.validate()
     area_code = args.area or config.area_codes[0]
@@ -65,11 +65,11 @@ def command_latest(args: argparse.Namespace) -> None:
     if args.storage == "database":
         if not config.database_url:
             raise SystemExit("DATABASE_URL is required for --storage database")
-        rows = latest_from_database(config.database_url, area_code, args.limit)
+        rows = stored_from_database(config.database_url, area_code, args.limit)
     else:
         if not config.json_storage_enabled:
             raise SystemExit("JSON storage is disabled")
-        rows = latest_prices(config.json_data_dir, area_code, args.limit)
+        rows = stored_prices(config.json_data_dir, area_code, args.limit)
     print(json.dumps(rows, ensure_ascii=False, indent=2))
 
 
@@ -96,13 +96,13 @@ def build_parser() -> argparse.ArgumentParser:
     )
     serve_parser.set_defaults(func=command_serve)
 
-    latest_parser = subparsers.add_parser("latest", help="inspect recent prices")
-    latest_parser.add_argument("--area", choices=ALL_AREA_CODES)
-    latest_parser.add_argument("--limit", type=int, default=48)
-    latest_parser.add_argument(
+    display_parser = subparsers.add_parser("display", help="print stored prices")
+    display_parser.add_argument("--area", choices=ALL_AREA_CODES)
+    display_parser.add_argument("--limit", type=int, default=48)
+    display_parser.add_argument(
         "--storage", choices=("json", "database"), default="json"
     )
-    latest_parser.set_defaults(func=command_latest)
+    display_parser.set_defaults(func=command_display)
 
     return parser
 
