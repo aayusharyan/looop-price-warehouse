@@ -3,21 +3,9 @@
 # Invoke from the repository root so COPY can see pyproject.toml and src/.
 FROM python:3.12-slim AS builder
 
-ARG VERSION=0.0.0
-
 WORKDIR /build
 COPY pyproject.toml README.md ./
 COPY src/looop_price_collector ./src/looop_price_collector
-
-# Rewrite __version__ to the version being built. pyproject reads the package
-# version from that attribute, so this is what makes the installed package agree
-# with the image label. sed exits 0 even when its pattern matched nothing, so grep
-# re-reads the file afterwards and fails the build instead of quietly installing
-# whatever version the source happened to carry.
-RUN sed -i "s/^__version__ = .*/__version__ = \"${VERSION}\"/" \
-        src/looop_price_collector/__init__.py \
-    && grep --quiet --line-regexp "__version__ = \"${VERSION}\"" \
-        src/looop_price_collector/__init__.py
 
 # Install into a venv rather than the system Python so the final stage can pick up
 # the package and its dependencies by copying one directory. The postgres extra is
@@ -27,13 +15,15 @@ RUN python -m venv /opt/venv \
 
 FROM python:3.12-slim
 
-# Repeated because an ARG only applies to the stage that declares it. Local builds
-# fall back to 0.0.0, marking the image as something other than a real release.
-ARG VERSION=0.0.0
+# The release workflow rewrites both version labels in place and commits them with
+# the bumped __version__, so every build of a given commit is labelled the same way
+# with no build arguments. Keep each literal on its own line: the workflow verifies
+# the rewrite by counting matching lines.
 LABEL org.opencontainers.image.title="Looop Price Warehouse" \
       org.opencontainers.image.description="Warehouse collector for Looop Denki electricity price data" \
       org.opencontainers.image.source="https://github.com/aayusharyan/looop-price-warehouse" \
-      org.opencontainers.image.version="${VERSION}"
+      org.opencontainers.image.version="0.1.0" \
+      version="0.1.0"
 
 RUN groupadd --system --gid 10001 collector \
     && useradd --system --uid 10001 --gid collector --home-dir /app collector
