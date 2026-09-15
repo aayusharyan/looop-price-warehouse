@@ -1,7 +1,7 @@
 # Build a small, non-root image that collects on a schedule by default and can
 # also run a single collection for external schedulers such as CI.
 # Invoke from the repository root so COPY can see pyproject.toml and src/.
-FROM python:3.12-slim AS builder
+FROM python:3.14-slim AS builder
 
 WORKDIR /build
 COPY pyproject.toml README.md ./
@@ -13,7 +13,7 @@ COPY src/looop_price_collector ./src/looop_price_collector
 RUN python -m venv /opt/venv \
     && /opt/venv/bin/pip install --no-cache-dir ".[postgres]"
 
-FROM python:3.12-slim
+FROM python:3.14-slim
 
 # The release workflow rewrites both version labels in place and commits them with
 # the bumped __version__, so every build of a given commit is labelled the same way
