@@ -12,6 +12,9 @@ from sqlalchemy.orm import Session
 
 from .models import Base, Price
 
+# The collector works in Japan Standard Time because the source publishes the
+# market that way. A timestamptz column drops that offset and keeps the instant,
+# so rows come back in UTC and are turned back into JST for callers here.
 JST = ZoneInfo("Asia/Tokyo")
 
 # PostgreSQL is the only supported SQL destination; other backends are rejected
@@ -31,10 +34,20 @@ EXAMPLE_URL = "postgresql+psycopg://user:password@host:5432/looop"
 
 
 def as_utc(value: datetime) -> datetime:
-    """Normalize to UTC so stored and incoming periods compare on equal terms."""
+    """Give a datetime read back from the database a definite offset.
+
+    A driver that returns a stored column without its zone leaves a naive value,
+    which no aware datetime is equal to and which later conversions would read as
+    system local time; treating it as UTC matches what the column holds.
+    """
     if value.tzinfo is None:
         return value.replace(tzinfo=timezone.utc)
     return value.astimezone(timezone.utc)
+
+
+def in_jst(value: datetime) -> datetime:
+    """Return a stored timestamp as the Japan Standard Time the source published."""
+    return as_utc(value).astimezone(JST)
 
 
 def parse_database_url(database_url: str) -> URL:
@@ -133,6 +146,8 @@ def store_in_database(
     updated = 0
 
     with Session(engine) as session:
+        # Aware datetimes are equal and hash alike when they name the same
+        # instant, so a JST period finds its stored UTC row without conversion.
         existing = {
             as_utc(row.valid_from): row
             for row in session.scalars(
@@ -140,21 +155,21 @@ def store_in_database(
             )
         }
         for period in periods:
-            row = existing.get(as_utc(period["from"]))
+            row = existing.get(period["from"])
             if row is None:
                 session.add(
                     Price(
                         area_code=area_code,
-                        valid_from=as_utc(period["from"]),
-                        valid_to=as_utc(period["to"]),
+                        valid_from=period["from"],
+                        valid_to=period["to"],
                         charge=period["charge"],
-                        observed_at=as_utc(fetched_at),
+                        observed_at=fetched_at,
                     )
                 )
                 inserted += 1
             elif row.charge != period["charge"]:
                 row.charge = period["charge"]
-                row.observed_at = as_utc(fetched_at)
+                row.observed_at = fetched_at
                 updated += 1
         session.commit()
 
@@ -180,8 +195,8 @@ def latest_from_database(
         # Reported in Japan Standard Time so SQL output matches the files.
         return [
             {
-                "from": as_utc(row.valid_from).astimezone(JST).isoformat(),
-                "to": as_utc(row.valid_to).astimezone(JST).isoformat(),
+                "from": in_jst(row.valid_from).isoformat(),
+                "to": in_jst(row.valid_to).isoformat(),
                 "charge": row.charge,
             }
             for row in reversed(rows)
