@@ -22,8 +22,8 @@ FROM python:3.12-slim
 LABEL org.opencontainers.image.title="Looop Price Warehouse" \
       org.opencontainers.image.description="Warehouse collector for Looop Denki electricity price data" \
       org.opencontainers.image.source="https://github.com/aayusharyan/looop-price-warehouse" \
-      org.opencontainers.image.version="1.0.0" \
-      version="1.0.0"
+      org.opencontainers.image.version="1.1.0" \
+      version="1.1.0"
 
 RUN groupadd --system --gid 10001 collector \
     && useradd --system --uid 10001 --gid collector --home-dir /app collector
