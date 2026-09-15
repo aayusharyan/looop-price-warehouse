@@ -20,6 +20,11 @@ class Price(Base):
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
     area_code: Mapped[str] = mapped_column(String(2), nullable=False, index=True)
+    # Every timestamp below is a PostgreSQL timestamptz. Despite the "with time
+    # zone" name, it records no zone: the offset given on write only identifies
+    # the instant, which is then stored in UTC. A period starting at midnight JST
+    # therefore reads back as 15:00 the previous day, and the storage layer puts
+    # the JST view back on for callers.
     valid_from: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), nullable=False, index=True
     )
