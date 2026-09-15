@@ -9,15 +9,26 @@ WORKDIR /build
 COPY pyproject.toml README.md ./
 COPY src/looop_price_collector ./src/looop_price_collector
 
-# Stamp the release version onto __version__ so the installed package and the
-# image label agree. Releases are major/minor only, hence the trailing .0.
+# Rewrite __version__ to the version being built. pyproject reads the package
+# version from that attribute, so this is what makes the installed package agree
+# with the image label. sed exits 0 even when its pattern matched nothing, so grep
+# re-reads the file afterwards and fails the build instead of quietly installing
+# whatever version the source happened to carry.
 RUN sed -i "s/^__version__ = .*/__version__ = \"${VERSION}\"/" \
         src/looop_price_collector/__init__.py \
-    && python -m venv /opt/venv \
+    && grep --quiet --line-regexp "__version__ = \"${VERSION}\"" \
+        src/looop_price_collector/__init__.py
+
+# Install into a venv rather than the system Python so the final stage can pick up
+# the package and its dependencies by copying one directory. The postgres extra is
+# always included so an image can write to a database without being rebuilt.
+RUN python -m venv /opt/venv \
     && /opt/venv/bin/pip install --no-cache-dir ".[postgres]"
 
 FROM python:3.12-slim
 
+# Repeated because an ARG only applies to the stage that declares it. Local builds
+# fall back to 0.0.0, marking the image as something other than a real release.
 ARG VERSION=0.0.0
 LABEL org.opencontainers.image.title="Looop Price Warehouse" \
       org.opencontainers.image.description="Warehouse collector for Looop Denki electricity price data" \
