@@ -5,11 +5,13 @@ name: Collect daily prices
 
 on:
   schedule:
-    # Cron is always UTC and Japan is UTC+9 all year. Looop publishes tomorrow's
-    # prices "around 16:00" JST without committing to a minute, so collect at
-    # 16:15 JST and again at 17:15 JST in case the first run is late or skipped.
-    - cron: "15 7 * * *"
-    - cron: "15 8 * * *"
+    # Looop publishes tomorrow's prices "around 16:00" JST without committing to
+    # a minute, so collect twice in case the first run is late or skipped. Cron
+    # defaults to UTC, hence the explicit zone; Japan has no DST to adjust for.
+    - cron: "15 16 * * *"
+      timezone: "Asia/Tokyo"
+    - cron: "15 17 * * *"
+      timezone: "Asia/Tokyo"
   workflow_dispatch:
 
 concurrency:
@@ -23,6 +25,11 @@ permissions:
 jobs:
   collect:
     runs-on: ubuntu-latest
+    # Shell dates below label prices by their JST delivery day, so run date(1)
+    # in that zone rather than converting. The collector itself is unaffected;
+    # it derives every date from an explicit Asia/Tokyo zone, not the clock.
+    env:
+      TZ: Asia/Tokyo
     steps:
       - name: Check out warehouse
         uses: actions/checkout@v7
@@ -64,7 +71,7 @@ jobs:
             echo "The source data is unchanged."
             exit 0
           fi
-          git commit -m "data: collect prices for $(date -u +%F)"
+          git commit -m "data: collect prices on $(date +%F)"
           git pull --rebase origin "${GITHUB_REF_NAME}"
           git push
 
