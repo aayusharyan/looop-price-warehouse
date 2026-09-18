@@ -64,7 +64,7 @@ class Config:
     )
     schedule: tuple[time, ...] = field(
         default_factory=lambda: parse_schedule(
-            os.getenv("COLLECT_SCHEDULE", "16:15,17:15")
+            os.getenv("COLLECT_SCHEDULE", "00:20,04:20,08:20,12:20,16:20,20:20")
         )
     )
     collect_on_start: bool = field(
