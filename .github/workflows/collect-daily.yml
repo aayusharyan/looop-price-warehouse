@@ -1,17 +1,18 @@
-# Run the published collector daily and commit whatever changed under data and
-# raw-cache, including raw responses the collector pruned or refreshed. After
-# collection, refresh the README warehouse-size badge from the first area dir.
+# Run the published collector on a schedule and commit whatever changed under
+# data and raw-cache, including raw responses the collector pruned or refreshed.
+# After collection, refresh the README warehouse-size badge from the first area
+# dir.
 name: Collect daily prices
 
 on:
   schedule:
     # Looop publishes tomorrow's prices "around 16:00" JST without committing to
-    # a minute, so collect twice in case the first run is late or skipped. Cron
-    # defaults to UTC, hence the explicit zone; Japan has no DST to adjust for.
-    - cron: "15 16 * * *"
-      timezone: "Asia/Tokyo"
-    - cron: "15 17 * * *"
-      timezone: "Asia/Tokyo"
+    # a minute, so poll every four hours instead of guessing the window. Six
+    # runs a day cover any zone, so the cron stays on the UTC default.
+    # This also prevents from delays in run because of heavy loads on GitHub.
+    # If a run is delayed or dropped from the queue, there are multiple chances
+    # to run again within a day and not lose the data.
+    - cron: "20 */4 * * *"
   workflow_dispatch:
 
 concurrency:
