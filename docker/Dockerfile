@@ -43,7 +43,7 @@ ENV PATH="/opt/venv/bin:$PATH" \
     RAW_CACHE_ENABLED=true \
     RAW_CACHE_DIR=/app/raw-cache \
     RAW_CACHE_MAX_FILES=10 \
-    COLLECT_SCHEDULE=16:15,17:15 \
+    COLLECT_SCHEDULE=00:20,04:20,08:20,12:20,16:20,20:20 \
     COLLECT_ON_START=true
 
 VOLUME ["/app/data", "/app/raw-cache"]
