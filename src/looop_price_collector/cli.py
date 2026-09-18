@@ -50,7 +50,7 @@ def command_serve(_: argparse.Namespace) -> None:
         print(json.dumps(result, ensure_ascii=False))
 
     LOGGER.info(
-        "Collecting daily at %s Japan Standard Time",
+        "Collecting each day at %s Japan Standard Time",
         ", ".join(scheduled.strftime("%H:%M") for scheduled in config.schedule),
     )
     serve(config.schedule, run_once, config.collect_on_start, stop_event)
