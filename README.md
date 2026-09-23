@@ -1,3 +1,4 @@
+![Loop](https://raw.githubusercontent.com/aayusharyan/looop-price-warehouse/refs/heads/main/.github/looop_denki_logo.svg)
 # Looop Price Warehouse
 
 [![CI](https://img.shields.io/github/actions/workflow/status/aayusharyan/looop-price-warehouse/ci.yml?branch=main&label=CI)](https://github.com/aayusharyan/looop-price-warehouse/actions/workflows/ci.yml)
@@ -184,3 +185,6 @@ LOOOP_TEST_DATABASE_URL='postgresql+psycopg://postgres:password@127.0.0.1:5432/l
 ```
 
 This warehouse preserves prices; consumers remain responsible for caching, access control, presentation, notifications, and business logic.
+
+---
+<sub>_Loop denki logo is a copyright of [Looopでんき](https://looop-denki.com)._</sub>
