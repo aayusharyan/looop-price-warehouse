@@ -2,7 +2,7 @@
   <img alt="Loop Denki Logo" src=".github/looop_denki_logo.svg" align="right" height="80">
 </picture>
 
-# Looop Price Warehouse <br /> [![Warehouse Size](https://img.shields.io/badge/Warehouse%20Size-24%20days-informational)](https://github.com/aayusharyan/looop-price-warehouse/tree/main/data) 
+# Looop Price Warehouse <br /> [![Warehouse Size](https://img.shields.io/badge/Warehouse%20Size-25%20days-informational)](https://github.com/aayusharyan/looop-price-warehouse/tree/main/data) 
 
 [![CI](https://img.shields.io/github/actions/workflow/status/aayusharyan/looop-price-warehouse/ci.yml?branch=main&label=CI)](https://github.com/aayusharyan/looop-price-warehouse/actions/workflows/ci.yml)
 [![Daily collection](https://img.shields.io/github/actions/workflow/status/aayusharyan/looop-price-warehouse/collect-daily.yml?label=Daily%20Collection)](https://github.com/aayusharyan/looop-price-warehouse/actions/workflows/collect-daily.yml)
