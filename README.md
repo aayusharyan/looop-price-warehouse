@@ -130,7 +130,7 @@ Environment variables:
 - `RAW_CACHE_ENABLED` enables the rolling raw cache; default: `true`.
 - `RAW_CACHE_DIR` selects its root folder; default: `./raw-cache`.
 - `RAW_CACHE_MAX_FILES` caps the cached responses per area; default: `10`.
-- `COLLECT_SCHEDULE` sets the `serve` times in JST; default: `16:15,17:15`.
+- `COLLECT_SCHEDULE` sets the `serve` times in JST; default: `00:20,04:20,08:20,12:20,16:20,20:20`.
 - `COLLECT_ON_START` collects once when `serve` starts; default: `true`.
 - `DATABASE_URL` enables PostgreSQL storage when set; it has no default.
 - `LOOOP_API_URL` overrides the upstream endpoint.
@@ -168,7 +168,7 @@ PostgreSQL is the only supported SQL destination, and a URL for any other backen
 
 The daily workflow pulls `ghcr.io/aayusharyan/looop-price-warehouse:latest`, the released image that a self-hosted collector runs too, so collection exercises the deployed artifact and a broken release shows up in this repository's own data first. Collection tracks published releases, not `main`, so a merge takes effect here only once a release is cut.
 
-The workflow runs that container at 16:15 JST and again at 17:15 JST, because Looop publishes tomorrow's prices "around 16:00" without committing to an exact minute and GitHub may delay or skip a scheduled run. The second run costs nothing when the first succeeded, since an unchanged day is not rewritten. Each run mounts this repository's `data` and `raw-cache` directories, cross-validates while collecting, and commits only what changed. It can also be started manually. Repository Actions need `contents: write`; protected branches must permit the workflow's commit or use a dedicated data branch.
+The workflow runs that container every four hours, at twenty past the hour in UTC, because Looop publishes tomorrow's prices "around 16:00" JST without committing to an exact minute and GitHub may delay or skip a scheduled run. Polling rather than aiming at that window costs nothing when an earlier run already succeeded, since an unchanged day is not rewritten. Each run mounts this repository's `data` and `raw-cache` directories, cross-validates while collecting, and commits only what changed. It can also be started manually. Repository Actions need `contents: write`; protected branches must permit the workflow's commit or use a dedicated data branch.
 
 A correction fails the workflow run. When an incoming charge disagrees with a date already stored, the collector logs the details, writes the newer value, and exits with code `2` under `--fail-on-correction`. The run still commits the corrected files first and only then fails, so the disagreement is preserved in git rather than lost to a red build. Any other failure, such as an unreachable source, exits non-zero immediately and produces no commit. The workflow concurrency setting also prevents overlapping runs.
 
