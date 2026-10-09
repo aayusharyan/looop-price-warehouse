@@ -1,5 +1,6 @@
-# Run the published collector on a schedule and commit whatever changed under
-# data and raw-cache, including raw responses the collector pruned or refreshed.
+# Run the published collector on a schedule and commit warehouse changes under
+# data/. Raw-cache is only committed alongside new or corrected price files;
+# four-hourly polls that leave data/ unchanged discard local cache churn.
 # After collection, refresh the README warehouse-size badge from the first area
 # dir.
 name: Collect daily prices
@@ -67,11 +68,15 @@ jobs:
         run: |
           git config user.name "Aayush Sinha"
           git config user.email "hello@yush.dev"
-          git add --all data raw-cache
+          git add --all data
           if git diff --cached --quiet; then
+            # Drop raw-cache edits from this run; they only matter next to a
+            # price commit, and the next data-changing collect will refresh them.
+            git checkout -- raw-cache
             echo "The source data is unchanged."
             exit 0
           fi
+          git add --all raw-cache
           git commit -m "data: collect prices on $(date +%F)"
           git pull --rebase origin "${GITHUB_REF_NAME}"
           git push
