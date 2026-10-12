@@ -157,9 +157,23 @@ jobs:
           git push origin "HEAD:refs/heads/$BRANCH"
           git tag --annotate "$TAG" --message "Release $TAG"
           git push origin "$TAG"
+          # GitHub's --generate-notes only lists merged PRs, so direct commits would be
+          # missing. Build the notes from the commit log instead, leaving out the
+          # automated version bump commit.
           if git rev-parse "$PREVIOUS_TAG" >/dev/null 2>&1; then
-            gh release create "$TAG" --title "$TAG" --generate-notes \
-              --notes-start-tag "$PREVIOUS_TAG"
+            range="${PREVIOUS_TAG}..${TAG}"
           else
-            gh release create "$TAG" --title "$TAG" --generate-notes
+            range="$TAG"
           fi
+          commits=$(git log "$range" --no-merges --pretty=format:"- %s (%h)" \
+            --invert-grep --grep="^Bump version to ")
+          {
+            echo "## What's Changed"
+            echo
+            echo "${commits:-No changes.}"
+            if git rev-parse "$PREVIOUS_TAG" >/dev/null 2>&1; then
+              echo
+              echo "**Full Changelog**: https://github.com/${GITHUB_REPOSITORY}/compare/${PREVIOUS_TAG}...${TAG}"
+            fi
+          } > RELEASE_NOTES.md
+          gh release create "$TAG" --title "$TAG" --notes-file RELEASE_NOTES.md
