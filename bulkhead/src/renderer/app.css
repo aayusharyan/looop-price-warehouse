@@ -1,0 +1,118 @@
+@font-face { font-family: "Geist"; font-weight: 100 900; font-display: block; src: url("fonts/geist-latin-wght-normal.woff2") format("woff2"); }
+@font-face { font-family: "Geist Mono"; font-weight: 100 900; font-display: block; src: url("fonts/geist-mono-latin-wght-normal.woff2") format("woff2"); }
+/* Bulkhead app layer on top of the Porcelain design system (porcelain.css is the design's, verbatim). */
+html, body { height: 100%; overflow: hidden; background: var(--bg-window); }
+[data-theme] { background: var(--bg-window); }
+html[data-theme="light"] { color-scheme: light; }
+body { -webkit-user-select: none; user-select: none; cursor: default; }
+input { -webkit-user-select: text; user-select: text; cursor: text; }
+
+/* the native window supplies radius and traffic lights */
+.app { border-radius: 0; min-width: 0; min-height: 0; }
+.app::after { display: none; }
+.titlebar { -webkit-app-region: drag; }
+.titlebar button, .titlebar a, .titlebar .tab, .titlebar input, .titlebar .srch, .titlebar .pill { -webkit-app-region: no-drag; }
+.tls { width: 62px; height: 28px; margin-right: 0; }
+.win-title { margin-left: 0; }
+
+/* tooltips are drawn by the overlay view so they float above web content */
+.has-tip::after { display: none !important; }
+
+/* sidebar rows follow density; the plate tracks the active row by index */
+html { --row: 44px; }
+html[data-density="compact"] { --row: 38px; }
+html[data-density="compact"] .side .tile { width: 30px; height: 30px; border-radius: 9px; font-size: 13px; }
+.grow { height: var(--row); }
+.plate { height: var(--row); transform: translateY(calc(var(--i, 0) * (var(--row) + 2px))); }
+.rows .grow.dragging { opacity: .45; }
+.rows .grow.drop-before::before, .rows .grow.drop-after::after { content: ""; position: absolute; left: 6px; right: 6px; height: 2px; border-radius: 1px; background: var(--accent); }
+.rows .grow.drop-before::before { top: -2px; } .rows .grow.drop-after::after { bottom: -2px; }
+.grow { transition: background var(--d-2) var(--ease-out), transform var(--d-2) var(--ease-out); }
+.g-count, .g-dot { animation: badge-pop var(--d-4) var(--ease-spring) both; }
+
+/* auto-hide rail: slides over a hot zone */
+.side { transition: width var(--d-4) var(--ease-out), margin-left var(--d-4) var(--ease-out), opacity var(--d-3) var(--ease-out); }
+.app.autohide .side { width: 56px; margin-left: -56px; opacity: 0; pointer-events: none; }
+.app.autohide.peek .side { margin-left: 0; opacity: 1; pointer-events: auto; }
+.hot { position: absolute; left: 0; top: 0; bottom: 0; width: 6px; z-index: 40; display: none; }
+.app.autohide .hot { display: block; }
+.app.autohide .chip-g { max-width: 180px; padding: 0 10px 0 5px; opacity: 1; margin-right: 4px; background: var(--bg-hover); }
+.app[data-mode="rail"] .chip-g, .app.autohide .chip-g { }
+.app.no-chip .chip-g { display: none; }
+
+/* tabs: smooth close, loading mark */
+.tab.leaving { animation: tab-out var(--d-2) var(--ease-out) both; pointer-events: none; }
+@keyframes tab-out { to { opacity: 0; transform: scale(.92); min-width: 0; flex-basis: 0; max-width: 0; padding: 0; } }
+.tab.stay { animation: none; }
+.tab-mark, .spin { transition: opacity var(--d-2); }
+.tab { flex: 0 1 184px; }
+.tab-main:focus-visible, .tab-x:focus-visible { outline-offset: -2px; }
+.pill-ok { transition: background var(--d-2), transform var(--d-1) var(--ease-out); }
+.pill-ok:active { transform: scale(.96); }
+.pill-ok:hover { background: color-mix(in srgb, var(--success) 20%, transparent); }
+.pill-btn.is-off { display: none; }
+
+/* the web view sits over .content; this is what shows while it creates */
+.content { cursor: default; }
+.empty { background: var(--bg-content); }
+.empty-act a { -webkit-app-region: no-drag; }
+.empty[hidden] { display: none; }
+
+/* settings window */
+.set-pane { -webkit-user-select: none; }
+.select-menu { position: fixed; z-index: 90; animation: pop-in var(--d-2) var(--ease-out) both; transform-origin: top right; }
+.select-menu .mi.is-sel .ic { color: var(--accent-text); }
+.select-menu .mi { cursor: default; }
+.select-menu .mi .chk { width: 16px; display: inline-flex; }
+.field.select[aria-expanded="true"] { box-shadow: inset 0 0 0 1px var(--accent), 0 0 0 3px var(--accent-soft); }
+.kbds.rec { cursor: default; border-radius: 8px; padding: 2px; transition: background var(--d-2) var(--ease-out), box-shadow var(--d-2) var(--ease-out); }
+.kbds.rec:hover { background: var(--bg-hover); }
+.kbds.recording { background: var(--accent-soft); box-shadow: 0 0 0 1px var(--accent); }
+.kbds .rec-hint { padding: 0 8px; font-size: 12px; color: var(--accent-text); font-weight: 500; animation: pulse 1.2s var(--ease-io) infinite; }
+@keyframes pulse { 50% { opacity: .45; } }
+.gi { cursor: default; }
+.gi.dragging { opacity: .4; }
+.gi.drop-before { box-shadow: 0 -2px 0 var(--accent); } .gi.drop-after { box-shadow: 0 2px 0 var(--accent); }
+.gi .grip { cursor: grab; }
+.tcard { cursor: default; }
+.num-note { color: var(--text-3); }
+.row .btn[disabled] { opacity: .45; }
+
+/* overlay view (transparent) */
+html.ov, html.ov body { background: transparent; }
+.ov .scrim { background: var(--bg-scrim); backdrop-filter: none; }
+.ov .scrim.out { animation: fade-out var(--d-2) var(--ease-out) both; }
+.ov .pal.out { animation: pop-out var(--d-2) var(--ease-out) both; }
+.ov .sheet.out { animation: sheet-out var(--d-3) var(--ease-io) both; }
+@keyframes fade-out { to { opacity: 0; } }
+@keyframes pop-out { to { opacity: 0; transform: translateY(-6px) scale(.98); } }
+@keyframes sheet-out { to { opacity: 0; transform: translateY(-24px); } }
+.ov .layer { position: fixed; }
+.ov .pal-row { cursor: default; width: 100%; text-align: left; }
+.ov .pal-row .tile-xs { }
+.pal-row.is-sel .grow-r .kbd { background: var(--bg-raised); }
+.pal-body:empty { display: none; }
+.tipbox { position: fixed; inset: 0; pointer-events: none; }
+.tip { position: absolute; padding: 4px 8px; border-radius: 7px; background: var(--tip-bg); color: var(--tip-fg); font: 500 11.5px/16px var(--font-ui); box-shadow: 0 4px 12px rgba(0,0,0,.18); white-space: nowrap; opacity: 0; transform: translateY(-2px); transition: opacity var(--d-2) var(--ease-out), transform var(--d-2) var(--ease-out); }
+.tip.in { opacity: 1; transform: none; }
+.tip.r { top: 50%; left: 4px; margin-top: -12px; transform: translateX(-3px); } .tip.r.in { transform: none; }
+.tip.b { top: 4px; left: 50%; translate: -50% 0; }
+.toastbox { position: fixed; inset: 0; display: flex; align-items: flex-end; justify-content: center; padding-bottom: 12px; pointer-events: none; }
+.toastbox .toast { pointer-events: auto; animation: toast-in var(--d-4) var(--ease-spring) both; }
+.toastbox .toast.out { animation: toast-out var(--d-3) var(--ease-out) both; }
+@keyframes toast-in { from { opacity: 0; transform: translateY(14px) scale(.96); } to { opacity: 1; transform: none; } }
+@keyframes toast-out { to { opacity: 0; transform: translateY(8px) scale(.97); } }
+.toast .toast-act { cursor: default; }
+
+/* reduced motion: quick fades, no slides or springs */
+html[data-motion="reduced"] *, html[data-motion="reduced"] *::before, html[data-motion="reduced"] *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; transition-delay: 0s !important; }
+html[data-motion="reduced"] .scrim, html[data-motion="reduced"] .pal, html[data-motion="reduced"] .sheet, html[data-motion="reduced"] .pane-in { animation: fade-in 120ms linear both !important; }
+html[data-motion="reduced"] .plate { transition: none !important; }
+
+/* new tab page */
+.nt { position: fixed; inset: 0; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 14px; text-align: center; background: var(--bg-content); }
+.nt .tile { animation: badge-pop var(--d-5) var(--ease-spring) both; }
+.nt h1 { font: 600 22px/28px var(--font-ui); letter-spacing: -.015em; animation: pane-in var(--d-4) var(--ease-out) .05s both; }
+.nt p { color: var(--text-3); display: flex; gap: 6px; align-items: center; justify-content: center; animation: pane-in var(--d-4) var(--ease-out) .1s both; }
+
+[hidden] { display: none !important; }

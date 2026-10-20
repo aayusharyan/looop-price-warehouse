@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; script-src 'self'">
+<title>Bulkhead</title>
+<link rel="stylesheet" href="porcelain.css">
+<link rel="stylesheet" href="app.css">
+</head>
+<body>
+<div class="app" id="app" data-mode="expanded">
+  <header class="titlebar">
+    <div class="tls" aria-hidden="true"></div>
+    <button class="ibtn has-tip" id="b-side" data-tip="Toggle sidebar  ⌘⌥S" aria-label="Toggle sidebar"></button>
+    <div class="navb">
+      <button class="ibtn has-tip" id="b-back" data-tip="Back  ⌘[" aria-label="Back"></button>
+      <button class="ibtn has-tip" id="b-fwd" data-tip="Forward  ⌘]" aria-label="Forward"></button>
+      <button class="ibtn has-tip" id="b-reload" data-tip="Reload  ⌘R" aria-label="Reload"></button>
+    </div>
+    <div class="chip-g" id="chip"></div>
+    <div class="tabs" id="tabs"></div>
+    <div class="tb-gap"></div>
+    <div class="tb-right">
+      <button class="pill pill-ok has-tip tip-l" id="iso" hidden></button>
+      <button class="srch" id="b-search" aria-label="Search groups, tabs and actions"></button>
+    </div>
+  </header>
+
+  <div class="body">
+    <div class="hot" id="hot"></div>
+    <aside class="side" id="side" aria-label="Groups">
+      <nav class="rows" id="rows" aria-label="Groups"><div class="plate" id="plate"></div></nav>
+      <div class="side-foot">
+        <button class="grow has-tip tip-r" id="b-new" data-tip="New group  ⌘N" aria-label="New group"></button>
+        <button class="grow has-tip tip-r" id="b-set" data-tip="Settings  ⌘," aria-label="Settings"></button>
+      </div>
+    </aside>
+
+    <main class="content" id="content">
+      <div class="loadbar" id="loadbar" hidden></div>
+      <div class="empty" id="empty" hidden></div>
+    </main>
+  </div>
+</div>
+<script src="common.js"></script>
+<script src="chrome.js"></script>
+</body>
+</html>
