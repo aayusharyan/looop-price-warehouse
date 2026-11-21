@@ -1,2 +1,4 @@
 node_modules/
 dist/
+# the repo root ignores build/; the app keeps its icons there
+!build/
