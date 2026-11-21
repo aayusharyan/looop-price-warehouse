@@ -9,20 +9,20 @@ import { site } from '../config';
 import { faq, compare } from '../data/content';
 
 const uses = [
-  ['c-green', 'Two WhatsApp accounts'], ['c-blue', 'Personal and work Gmail'], ['c-vermilion', 'Client dashboards'],
-  ['c-violet', 'Social media accounts'], ['c-amber', 'Testing as different users'],
+  ['c-green', 'Two WhatsApp accounts'], ['c-blue', 'Work and personal Gmail'], ['c-vermilion', 'Client dashboards'],
+  ['c-violet', 'Several social accounts'], ['c-amber', 'Testing as different users'],
 ];
 const nos = [
-  ['Sub', 'No subscription', 'One payment. Nothing renews.'],
-  ['Ads', 'No ads', 'Not in the app, not on the new-tab page.'],
-  ['Data', 'No data collection', 'No analytics or tracking. Your data stays on your device.'],
-  ['Fees', 'No upgrade fees', 'Every future version is free.'],
+  ['$0 / month', 'No subscription', 'You pay once. Nothing renews.'],
+  ['0 ads', 'No ads', 'None in the app or on the new-tab page.'],
+  ['0 trackers', 'No data collection', 'No analytics or telemetry. Logins and history stay on your computer.'],
+  ['$0 upgrades', 'Free updates', 'Every future version is included.'],
 ];
 const secs = [
-  ['box', 'Sealed sessions', 'Each group runs in its own browser partition. One group can’t read another’s cookies or storage.'],
-  ['shield', 'Sandboxed pages', 'Web pages run in sandboxed, context-isolated processes and never touch the app itself.'],
-  ['lock', 'Permissions per group', 'Camera, microphone and location answers are remembered per group, never across groups.'],
-  ['eyeoff', 'Nothing leaves your device', 'No analytics, no telemetry and no account. We don’t collect your browsing, so we can’t lose it.'],
+  ['box', 'Separate sessions', 'A group’s cookies, storage and cache sit in their own partition. Other groups can’t read them.'],
+  ['shield', 'Sandboxed pages', 'Web pages run in sandboxed processes and can’t reach the app’s own code.'],
+  ['lock', 'Permissions per group', 'If you allow the camera for a site in one group, the other groups still ask.'],
+  ['eyeoff', 'No telemetry', 'Kavori doesn’t send analytics or browsing data anywhere, and there’s no account to create.'],
 ];
 ---
 <Base>
@@ -42,14 +42,14 @@ const secs = [
     <!-- Hero -->
     <section class="hero">
       <div class="wrap">
-        <div class="pillrow rise"><span class="pill"><span class="dot"></span>One payment · No subscription · No ads · No tracking</span></div>
-        <h1 class="rise d1">One browser. <em>Every account,</em> kept apart.</h1>
-        <p class="lede rise d2">Run two WhatsApps, three Gmails and a client’s dashboard side by side. Each lives in its own sealed container, so nothing signs you out of anything else.</p>
+        <div class="pillrow rise"><span class="pill"><span class="dot"></span>Pay once. No subscription, no ads, no tracking.</span></div>
+        <h1 class="rise d1">Log in to the same site <em>as many times</em> as you like.</h1>
+        <p class="lede rise d2">Kavori keeps each login in its own container, so a second WhatsApp or Gmail account doesn’t sign out the first. Works on Mac, Windows and Linux.</p>
         <div class="cta-row rise d3">
-          <a class="btn btn-primary" href="#pricing">Buy Kavori · {site.price}<Icon name="arrow" class="ic arrow" /></a>
-          <a class="btn btn-secondary" href="#why">See how it’s different</a>
+          <a class="btn btn-primary" href="#pricing">Buy Kavori, {site.price}<Icon name="arrow" class="ic arrow" /></a>
+          <a class="btn btn-secondary" href="#why">How it works</a>
         </div>
-        <div class="plat rise d4"><span>macOS</span><span>Windows</span><span>Linux</span><span>Free updates, forever</span></div>
+        <div class="plat rise d4"><span>Mac</span><span>Windows</span><span>Linux</span><span>Free updates</span></div>
         <div class="rise d5"><HeroDemo client:load /></div>
         <div class="uses" aria-label="Things people use Kavori for">
           {uses.map(([c, t], i) => <span class={`use ${c}`} data-reveal style={`--i:${i}`}><i></i>{t}</span>)}
@@ -61,13 +61,13 @@ const secs = [
     <section class="sec why" id="why">
       <div class="wrap why-grid">
         <div data-reveal>
-          <p class="eyebrow">Why it’s not just another browser</p>
-          <h2 class="h2">A browser has one cookie jar. Kavori gives every account its own.</h2>
-          <p class="lede">Sign in to a second account on the same site and a normal browser quietly signs you out of the first. Profiles fix it, but at the cost of separate windows and a mess. Kavori puts the separation inside one calm window.</p>
+          <p class="eyebrow">How it works</p>
+          <h2 class="h2">A normal browser keeps one set of cookies per site.</h2>
+          <p class="lede">That’s why logging in to a second account signs you out of the first. Browser profiles get around it, but each profile is its own window with its own settings. In Kavori every group has separate cookies, storage and cache, and they all live in one window.</p>
           <div class="points">
-            <div class="point"><span class="num">1</span><div><b>A group is a sealed session</b><span>Its own logins, cookies, storage and cache. Nothing is shared with any other group.</span></div></div>
-            <div class="point"><span class="num">2</span><div><b>Everything stays in one window</b><span>Switch accounts from the sidebar, or press ⌘K from anywhere.</span></div></div>
-            <div class="point"><span class="num">3</span><div><b>Nothing to set up</b><span>Make a group, name it, give it a colour. Open any site inside it.</span></div></div>
+            <div class="point"><span class="num">1</span><div><b>Make a group for each account</b><span>Give it a name and a color, open a site in it and log in.</span></div></div>
+            <div class="point"><span class="num">2</span><div><b>Groups can’t see each other</b><span>Cookies, storage and cache are separate, so a site in one group can’t tell the others exist.</span></div></div>
+            <div class="point"><span class="num">3</span><div><b>Switch from the sidebar</b><span>Or press ⌘K and type the group’s name.</span></div></div>
           </div>
         </div>
         <div data-reveal style="--i:2"><JarLab client:visible /></div>
@@ -78,45 +78,44 @@ const secs = [
     <section class="sec" id="features">
       <div class="wrap">
         <div class="sec-head center" data-reveal>
-          <p class="eyebrow">What’s inside</p>
-          <h2 class="h2">Small, quiet and fast to get around.</h2>
-          <p class="lede">A browser built around one idea, with the details done properly.</p>
+          <p class="eyebrow">Features</p>
+          <h2 class="h2">What you get</h2>
         </div>
         <div class="bento">
           <div class="f w3" data-reveal>
             <div class="f-vis"><span class="tile mini-tile c-vermilion">S</span><span class="tile mini-tile c-blue">P</span><span class="tile mini-tile c-green">A</span></div>
-            <h3>Sealed containers</h3>
-            <p>Every group has its own cookies, storage and cache. Open the same site in three groups and stay signed in as three different people.</p>
+            <h3>Containers</h3>
+            <p>Every group has its own cookies, storage and cache. The same site can be open in three groups, logged in as three different people.</p>
           </div>
           <div class="f w3" data-reveal style="--i:1">
             <div class="f-vis"><span class="sw"></span><span style="color:var(--text-3);font-size:14px">Wipe on quit</span></div>
-            <h3>Persistent or temporary</h3>
-            <p>Keep a group’s logins between launches, or make it temporary so everything is erased when you quit.</p>
+            <h3>Temporary groups</h3>
+            <p>Mark a group temporary and everything in it is deleted when you quit. Handy for logging in somewhere once.</p>
           </div>
           <div class="f" data-reveal>
             <div class="f-vis"><div class="row-kbd"><span class="kbds"><span class="kbd press">⌘</span><span class="kbd press">K</span></span><Icon name="search" class="ic" /></div></div>
-            <h3>⌘K to go anywhere</h3>
-            <p>Jump to a group, a tab or an action without touching the mouse.</p>
+            <h3>⌘K</h3>
+            <p>Jump to a group, an open tab or a command by typing.</p>
           </div>
           <div class="f" data-reveal style="--i:1">
             <div class="f-vis"><span class="tile c-blue">P</span><span class="badge" style="margin-left:-22px;margin-top:-30px">12</span></div>
-            <h3>Unread at a glance</h3>
-            <p>Badges on each group and your Dock icon, so you know where to look.</p>
+            <h3>Unread counts</h3>
+            <p>Each group shows its unread count, and the Dock icon shows the total. This works for sites that put the count in the page title.</p>
           </div>
           <div class="f" data-reveal style="--i:2">
             <div class="f-vis"><span class="f-ic"><Icon name="cookie" class="ic ic-lg" /></span></div>
-            <h3>Per-group cookie rules</h3>
-            <p>Block third-party cookies in one group and leave another alone.</p>
+            <h3>Cookie settings per group</h3>
+            <p>Turn third-party cookie blocking on or off for each group.</p>
           </div>
           <div class="f w4" data-reveal>
             <div class="f-vis"><div class="themes"><span class="th"><i class="a" style="background:#EDEEF1"></i><i class="b" style="background:#fff"></i></span><span class="th"><i class="a" style="background:#141518"></i><i class="b" style="background:#1B1D21"></i></span></div></div>
-            <h3>Porcelain and Graphite</h3>
-            <p>Light by default, a calm dark theme when you want it, or follow your system. Reduced motion is respected everywhere.</p>
+            <h3>Light and dark</h3>
+            <p>Follows your system, or pick one yourself. Animations tone down if your OS is set to reduce motion.</p>
           </div>
           <div class="f" data-reveal style="--i:1">
             <div class="f-vis"><div class="plats"><span>macOS</span><span>Windows</span><span>Linux</span></div></div>
-            <h3>One app, every desktop</h3>
-            <p>The same Kavori on all three, one licence.</p>
+            <h3>Mac, Windows, Linux</h3>
+            <p>One license covers all three.</p>
           </div>
         </div>
       </div>
@@ -127,18 +126,18 @@ const secs = [
       <div class="wrap">
         <div class="sec-head" data-reveal>
           <p class="eyebrow">Pricing</p>
-          <h2 class="h2">Pay once. Keep it. Get every upgrade.</h2>
-          <p class="lede">No subscription to forget about, no ads, and no data collected. Updates cost nothing, now or later.</p>
+          <h2 class="h2">Pay once and it’s yours.</h2>
+          <p class="lede">No subscription, no ads, no tracking. Future updates are free.</p>
         </div>
         <div class="price-wrap">
           <div class="nos">
-            {nos.map(([b, t, d], i) => <div class="no" data-reveal style={`--i:${i}`}><b><s>{b}</s></b><span>{t}</span><p>{d}</p></div>)}
+            {nos.map(([b, t, d], i) => <div class="no" data-reveal style={`--i:${i}`}><b>{b}</b><span>{t}</span><p>{d}</p></div>)}
           </div>
           <div class="buy" data-reveal style="--i:2">
-            <span class="lbl">Kavori · all platforms</span>
+            <span class="lbl">Kavori, all platforms</span>
             <div class="amt">{site.price}<small>one-time</small></div>
             <ul>
-              {['macOS, Windows and Linux', 'Unlimited groups and tabs', 'All future upgrades, free', 'Security updates included'].map((t) => <li><Icon name="check" />{t}</li>)}
+              {['Mac, Windows and Linux', 'Unlimited groups and tabs', 'Free updates for every future version', 'Security fixes included'].map((t) => <li><Icon name="check" />{t}</li>)}
             </ul>
             <a class="btn" href={site.buyUrl}>Buy Kavori<Icon name="arrow" class="ic arrow" /></a>
             <p class="fine">{site.refund}</p>
@@ -152,15 +151,15 @@ const secs = [
       <div class="wrap">
         <div class="sec-head" data-reveal>
           <p class="eyebrow">Security</p>
-          <h2 class="h2">Separate by design. Kept up to date by us.</h2>
-          <p class="lede">Isolation is the whole point of Kavori, so it’s built in at the lowest level rather than layered on top.</p>
+          <h2 class="h2">How the separation works</h2>
+          <p class="lede">Each group runs in its own Chromium session. In practice that means this:</p>
         </div>
         <div class="sec-grid">
           {secs.map(([i, t, d], n) => <div class="s" data-reveal style={`--i:${n}`}><span class="f-ic"><Icon name={i} class="ic ic-lg" /></span><h3>{t}</h3><p>{d}</p></div>)}
         </div>
         <div class="promise" data-reveal>
           <Icon name="refresh" />
-          <p><b>We take care of the patching.</b> Kavori is built on Chromium. When Chromium ships a security fix, we ship an update, included in your one payment.</p>
+          <p>Kavori is built on Chromium. When Chromium gets a security fix, we release an update. It’s included in the price.</p>
         </div>
       </div>
     </section>
@@ -170,8 +169,8 @@ const secs = [
       <div class="wrap">
         <div class="sec-head center" data-reveal>
           <p class="eyebrow">Compare</p>
-          <h2 class="h2">An honest look at the alternatives.</h2>
-          <p class="lede">There are good tools in this space. Here is where each one fits, including where it beats us.</p>
+          <h2 class="h2">How Kavori compares</h2>
+          <p class="lede">Ferdium and Firefox Containers are free, and either may be all you need. Here’s where they differ.</p>
         </div>
         <div class="cmp-box" data-reveal>
           <table class="cmp">
@@ -185,11 +184,11 @@ const secs = [
             </tbody>
           </table>
         </div>
-        <p class="cmp-note">Compared in {site.comparedOn}. Plans and features change, so please check each project’s own site.</p>
+        <p class="cmp-note">Compared in {site.comparedOn}. Prices and features change, so check each site.</p>
         <div class="choose">
-          <div class="ch" data-reveal><span class="tag">Choose Ferdium</span><b>If free and open source come first.</b><p>It costs nothing and you can read the code. You rely on the community for updates and security.</p></div>
-          <div class="ch" data-reveal style="--i:1"><span class="tag">Choose Firefox Containers</span><b>If you already live in Firefox.</b><p>Free, and fine if cookie separation is all you need. History and extensions stay shared.</p></div>
-          <div class="ch" data-reveal style="--i:2"><span class="tag win">Choose Kavori</span><b>If you want to pay once and be done.</b><p>A calm app, free upgrades forever, and someone who is responsible for keeping it secure.</p></div>
+          <div class="ch" data-reveal><span class="tag">Ferdium</span><b>Pick Ferdium if free and open source matter most.</b><p>It costs nothing and the code is public. Updates and security depend on its community.</p></div>
+          <div class="ch" data-reveal style="--i:1"><span class="tag">Firefox Containers</span><b>Pick Containers if you already use Firefox.</b><p>It’s free, and enough if you only need separate cookies. History and extensions are shared between containers.</p></div>
+          <div class="ch" data-reveal style="--i:2"><span class="tag win">Kavori</span><b>Pick Kavori if you’d rather pay once.</b><p>You get updates for good, and a maintainer who handles security fixes.</p></div>
         </div>
       </div>
     </section>
@@ -197,7 +196,7 @@ const secs = [
     <!-- FAQ -->
     <section class="sec" id="faq">
       <div class="wrap">
-        <div class="sec-head center" data-reveal><p class="eyebrow">Questions</p><h2 class="h2">Good to know.</h2></div>
+        <div class="sec-head center" data-reveal><h2 class="h2">Questions</h2></div>
         <div data-reveal><Faq items={faq} client:visible /></div>
       </div>
     </section>
@@ -205,10 +204,10 @@ const secs = [
     <!-- Final CTA -->
     <section class="final" id="buy">
       <div class="wrap" data-reveal>
-        <h2>Every account. One window. One payment.</h2>
-        <p class="lede">Stop signing out and back in. Get Kavori once and keep every upgrade.</p>
+        <h2>Kavori is {site.price}, once.</h2>
+        <p class="lede">Mac, Windows and Linux. Every future update is included.</p>
         <div class="cta-row">
-          <a class="btn btn-primary" href={site.buyUrl}>Buy Kavori · {site.price}<Icon name="arrow" class="ic arrow" /></a>
+          <a class="btn btn-primary" href={site.buyUrl}>Buy Kavori, {site.price}<Icon name="arrow" class="ic arrow" /></a>
           <a class="btn btn-secondary" href="#why">How it works</a>
         </div>
       </div>

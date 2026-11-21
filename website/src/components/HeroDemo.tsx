@@ -41,7 +41,7 @@ export default function HeroDemo() {
               <div className={`who ${g.color}`}>
                 <span className={`tile tile-lg ${g.color}`}>{g.glyph}</span>
                 <div><b>{g.who}</b><span>chat.example.com</span></div>
-                <span className="me">Signed in</span>
+                <span className="me">Logged in</span>
               </div>
               {[['36%', '82%', '9:41'], ['30%', '64%', '9:12'], ['42%', '76%', 'Mon']].map(([a, b, t]) => (
                 <div key={t} className={`msg ${g.color}`}>
@@ -52,7 +52,7 @@ export default function HeroDemo() {
           </div>
         </div>
       </div>
-      <p className="tryline"><span className="hand"><Icon name="left" className="ic ic-sm" /></span>Try it. Click a group to switch accounts. Same site, three different people.</p>
+      <p className="tryline"><span className="hand"><Icon name="left" className="ic ic-sm" /></span>Click a group on the left. Each one is a different login on the same site.</p>
     </div>
   );
 }
