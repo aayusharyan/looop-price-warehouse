@@ -1,0 +1,9 @@
+/* Website-only additions to kavori.css: scroll reveals. Content stays visible without JS. */
+html.js [data-reveal] { opacity: 0; transform: translateY(20px); transition: opacity var(--d5) var(--ease-out), transform var(--d5) var(--ease-out); transition-delay: calc(var(--i, 0) * 70ms); }
+html.js [data-reveal].in { opacity: 1; transform: none; }
+html.k { scroll-behavior: smooth; scroll-padding-top: 84px; }
+html.k body { margin: 0; }
+@media (prefers-reduced-motion: reduce) {
+  html.k { scroll-behavior: auto; }
+  html.js [data-reveal] { opacity: 1; transform: none; transition: none; }
+}

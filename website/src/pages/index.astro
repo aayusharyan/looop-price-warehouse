@@ -1,0 +1,226 @@
+---
+import Base from '../layouts/Base.astro';
+import Icon from '../components/Icon.astro';
+import ThemeToggle from '../components/ThemeToggle';
+import HeroDemo from '../components/HeroDemo';
+import JarLab from '../components/JarLab';
+import Faq from '../components/Faq';
+import { site } from '../config';
+import { faq, compare } from '../data/content';
+
+const uses = [
+  ['c-green', 'Two WhatsApp accounts'], ['c-blue', 'Personal and work Gmail'], ['c-vermilion', 'Client dashboards'],
+  ['c-violet', 'Social media accounts'], ['c-amber', 'Testing as different users'],
+];
+const nos = [
+  ['Sub', 'No subscription', 'One payment. Nothing renews.'],
+  ['Ads', 'No ads', 'Not in the app, not on the new-tab page.'],
+  ['Data', 'No data collection', 'No analytics or tracking. Your data stays on your device.'],
+  ['Fees', 'No upgrade fees', 'Every future version is free.'],
+];
+const secs = [
+  ['box', 'Sealed sessions', 'Each group runs in its own browser partition. One group can’t read another’s cookies or storage.'],
+  ['shield', 'Sandboxed pages', 'Web pages run in sandboxed, context-isolated processes and never touch the app itself.'],
+  ['lock', 'Permissions per group', 'Camera, microphone and location answers are remembered per group, never across groups.'],
+  ['eyeoff', 'Nothing leaves your device', 'No analytics, no telemetry and no account. We don’t collect your browsing, so we can’t lose it.'],
+];
+---
+<Base>
+  <header class="nav">
+    <div class="wrap nav-in">
+      <a class="brand" href="#top" aria-label="Kavori home"><span class="brand-mark">K</span>Kavori</a>
+      <nav class="nav-links" aria-label="Sections">
+        <a href="#why">Why Kavori</a><a href="#features">Features</a><a href="#security">Security</a><a href="#compare">Compare</a><a href="#pricing">Pricing</a>
+      </nav>
+      <span class="nav-gap"></span>
+      <ThemeToggle client:load />
+      <a class="btn btn-primary btn-sm" href="#pricing">Get Kavori</a>
+    </div>
+  </header>
+
+  <main id="top">
+    <!-- Hero -->
+    <section class="hero">
+      <div class="wrap">
+        <div class="pillrow rise"><span class="pill"><span class="dot"></span>One payment · No subscription · No ads · No tracking</span></div>
+        <h1 class="rise d1">One browser. <em>Every account,</em> kept apart.</h1>
+        <p class="lede rise d2">Run two WhatsApps, three Gmails and a client’s dashboard side by side. Each lives in its own sealed container, so nothing signs you out of anything else.</p>
+        <div class="cta-row rise d3">
+          <a class="btn btn-primary" href="#pricing">Buy Kavori · {site.price}<Icon name="arrow" class="ic arrow" /></a>
+          <a class="btn btn-secondary" href="#why">See how it’s different</a>
+        </div>
+        <div class="plat rise d4"><span>macOS</span><span>Windows</span><span>Linux</span><span>Free updates, forever</span></div>
+        <div class="rise d5"><HeroDemo client:load /></div>
+        <div class="uses" aria-label="Things people use Kavori for">
+          {uses.map(([c, t], i) => <span class={`use ${c}`} data-reveal style={`--i:${i}`}><i></i>{t}</span>)}
+        </div>
+      </div>
+    </section>
+
+    <!-- Why -->
+    <section class="sec why" id="why">
+      <div class="wrap why-grid">
+        <div data-reveal>
+          <p class="eyebrow">Why it’s not just another browser</p>
+          <h2 class="h2">A browser has one cookie jar. Kavori gives every account its own.</h2>
+          <p class="lede">Sign in to a second account on the same site and a normal browser quietly signs you out of the first. Profiles fix it, but at the cost of separate windows and a mess. Kavori puts the separation inside one calm window.</p>
+          <div class="points">
+            <div class="point"><span class="num">1</span><div><b>A group is a sealed session</b><span>Its own logins, cookies, storage and cache. Nothing is shared with any other group.</span></div></div>
+            <div class="point"><span class="num">2</span><div><b>Everything stays in one window</b><span>Switch accounts from the sidebar, or press ⌘K from anywhere.</span></div></div>
+            <div class="point"><span class="num">3</span><div><b>Nothing to set up</b><span>Make a group, name it, give it a colour. Open any site inside it.</span></div></div>
+          </div>
+        </div>
+        <div data-reveal style="--i:2"><JarLab client:visible /></div>
+      </div>
+    </section>
+
+    <!-- Features -->
+    <section class="sec" id="features">
+      <div class="wrap">
+        <div class="sec-head center" data-reveal>
+          <p class="eyebrow">What’s inside</p>
+          <h2 class="h2">Small, quiet and fast to get around.</h2>
+          <p class="lede">A browser built around one idea, with the details done properly.</p>
+        </div>
+        <div class="bento">
+          <div class="f w3" data-reveal>
+            <div class="f-vis"><span class="tile mini-tile c-vermilion">S</span><span class="tile mini-tile c-blue">P</span><span class="tile mini-tile c-green">A</span></div>
+            <h3>Sealed containers</h3>
+            <p>Every group has its own cookies, storage and cache. Open the same site in three groups and stay signed in as three different people.</p>
+          </div>
+          <div class="f w3" data-reveal style="--i:1">
+            <div class="f-vis"><span class="sw"></span><span style="color:var(--text-3);font-size:14px">Wipe on quit</span></div>
+            <h3>Persistent or temporary</h3>
+            <p>Keep a group’s logins between launches, or make it temporary so everything is erased when you quit.</p>
+          </div>
+          <div class="f" data-reveal>
+            <div class="f-vis"><div class="row-kbd"><span class="kbds"><span class="kbd press">⌘</span><span class="kbd press">K</span></span><Icon name="search" class="ic" /></div></div>
+            <h3>⌘K to go anywhere</h3>
+            <p>Jump to a group, a tab or an action without touching the mouse.</p>
+          </div>
+          <div class="f" data-reveal style="--i:1">
+            <div class="f-vis"><span class="tile c-blue">P</span><span class="badge" style="margin-left:-22px;margin-top:-30px">12</span></div>
+            <h3>Unread at a glance</h3>
+            <p>Badges on each group and your Dock icon, so you know where to look.</p>
+          </div>
+          <div class="f" data-reveal style="--i:2">
+            <div class="f-vis"><span class="f-ic"><Icon name="cookie" class="ic ic-lg" /></span></div>
+            <h3>Per-group cookie rules</h3>
+            <p>Block third-party cookies in one group and leave another alone.</p>
+          </div>
+          <div class="f w4" data-reveal>
+            <div class="f-vis"><div class="themes"><span class="th"><i class="a" style="background:#EDEEF1"></i><i class="b" style="background:#fff"></i></span><span class="th"><i class="a" style="background:#141518"></i><i class="b" style="background:#1B1D21"></i></span></div></div>
+            <h3>Porcelain and Graphite</h3>
+            <p>Light by default, a calm dark theme when you want it, or follow your system. Reduced motion is respected everywhere.</p>
+          </div>
+          <div class="f" data-reveal style="--i:1">
+            <div class="f-vis"><div class="plats"><span>macOS</span><span>Windows</span><span>Linux</span></div></div>
+            <h3>One app, every desktop</h3>
+            <p>The same Kavori on all three, one licence.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Pricing -->
+    <section class="sec why" id="pricing">
+      <div class="wrap">
+        <div class="sec-head" data-reveal>
+          <p class="eyebrow">Pricing</p>
+          <h2 class="h2">Pay once. Keep it. Get every upgrade.</h2>
+          <p class="lede">No subscription to forget about, no ads, and no data collected. Updates cost nothing, now or later.</p>
+        </div>
+        <div class="price-wrap">
+          <div class="nos">
+            {nos.map(([b, t, d], i) => <div class="no" data-reveal style={`--i:${i}`}><b><s>{b}</s></b><span>{t}</span><p>{d}</p></div>)}
+          </div>
+          <div class="buy" data-reveal style="--i:2">
+            <span class="lbl">Kavori · all platforms</span>
+            <div class="amt">{site.price}<small>one-time</small></div>
+            <ul>
+              {['macOS, Windows and Linux', 'Unlimited groups and tabs', 'All future upgrades, free', 'Security updates included'].map((t) => <li><Icon name="check" />{t}</li>)}
+            </ul>
+            <a class="btn" href={site.buyUrl}>Buy Kavori<Icon name="arrow" class="ic arrow" /></a>
+            <p class="fine">{site.refund}</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Security -->
+    <section class="sec" id="security">
+      <div class="wrap">
+        <div class="sec-head" data-reveal>
+          <p class="eyebrow">Security</p>
+          <h2 class="h2">Separate by design. Kept up to date by us.</h2>
+          <p class="lede">Isolation is the whole point of Kavori, so it’s built in at the lowest level rather than layered on top.</p>
+        </div>
+        <div class="sec-grid">
+          {secs.map(([i, t, d], n) => <div class="s" data-reveal style={`--i:${n}`}><span class="f-ic"><Icon name={i} class="ic ic-lg" /></span><h3>{t}</h3><p>{d}</p></div>)}
+        </div>
+        <div class="promise" data-reveal>
+          <Icon name="refresh" />
+          <p><b>We take care of the patching.</b> Kavori is built on Chromium. When Chromium ships a security fix, we ship an update, included in your one payment.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Compare -->
+    <section class="sec why" id="compare">
+      <div class="wrap">
+        <div class="sec-head center" data-reveal>
+          <p class="eyebrow">Compare</p>
+          <h2 class="h2">An honest look at the alternatives.</h2>
+          <p class="lede">There are good tools in this space. Here is where each one fits, including where it beats us.</p>
+        </div>
+        <div class="cmp-box" data-reveal>
+          <table class="cmp">
+            <thead>
+              <tr><th></th>{compare.columns.map((c) => <th class={c.us ? 'us' : ''}>{c.name}<small>{c.sub}</small></th>)}</tr>
+            </thead>
+            <tbody>
+              {compare.rows.map(([label, cells]) => (
+                <tr><th>{label}</th>{cells.map((c, i) => <td class={i === 0 ? 'us' : ''}>{c.t}{c.win && <> <span class="tag win">{c.win}</span></>}</td>)}</tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <p class="cmp-note">Compared in {site.comparedOn}. Plans and features change, so please check each project’s own site.</p>
+        <div class="choose">
+          <div class="ch" data-reveal><span class="tag">Choose Ferdium</span><b>If free and open source come first.</b><p>It costs nothing and you can read the code. You rely on the community for updates and security.</p></div>
+          <div class="ch" data-reveal style="--i:1"><span class="tag">Choose Firefox Containers</span><b>If you already live in Firefox.</b><p>Free, and fine if cookie separation is all you need. History and extensions stay shared.</p></div>
+          <div class="ch" data-reveal style="--i:2"><span class="tag win">Choose Kavori</span><b>If you want to pay once and be done.</b><p>A calm app, free upgrades forever, and someone who is responsible for keeping it secure.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="sec" id="faq">
+      <div class="wrap">
+        <div class="sec-head center" data-reveal><p class="eyebrow">Questions</p><h2 class="h2">Good to know.</h2></div>
+        <div data-reveal><Faq items={faq} client:visible /></div>
+      </div>
+    </section>
+
+    <!-- Final CTA -->
+    <section class="final" id="buy">
+      <div class="wrap" data-reveal>
+        <h2>Every account. One window. One payment.</h2>
+        <p class="lede">Stop signing out and back in. Get Kavori once and keep every upgrade.</p>
+        <div class="cta-row">
+          <a class="btn btn-primary" href={site.buyUrl}>Buy Kavori · {site.price}<Icon name="arrow" class="ic arrow" /></a>
+          <a class="btn btn-secondary" href="#why">How it works</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="foot">
+    <div class="wrap foot-in">
+      <a class="brand" href="#top"><span class="brand-mark">K</span>Kavori</a>
+      <span>© {site.year} {site.company}</span>
+      <span class="gap"></span>
+      <a href="#">Privacy</a><a href="#">Terms</a><a href="#">Contact</a>
+    </div>
+  </footer>
+</Base>
