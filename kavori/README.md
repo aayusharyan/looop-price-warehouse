@@ -23,3 +23,15 @@ npm run dist   # builds a .dmg (macOS)
 
 Motion follows the design tokens (springs for the active-row plate, switches and segmented thumbs; 100–500 ms durations) and
 respects *Reduced motion* from macOS or Settings → Appearance.
+
+## Icons
+
+The app's UI icons come from Font Awesome, chosen in `icons.config.json` (app icon name → Font Awesome name, plus a `style`).
+
+```sh
+npm run icons     # regenerates src/renderer/icons.generated.js
+```
+
+- **Free (default):** `@fortawesome/fontawesome-free`, `style: "solid"`. Free is almost all Solid, so icons look heavier than the earlier line icons. Attribution (CC BY 4.0) is on the website's Legal notices page.
+- **Pro:** install `@fortawesome/fontawesome-pro` using your own Font Awesome npm token (kept in your user `~/.npmrc`, never in the repo), set `style` to `regular`, `light`, `thin`, `duotone` or a `sharp-*` style, and run `npm run icons`. Icons missing from a style fall back to Solid and are listed.
+- If this repository is public, don't commit Pro-generated output: the Font Awesome Pro license doesn't allow publishing the raw Pro icons. Generate it in CI or locally instead.

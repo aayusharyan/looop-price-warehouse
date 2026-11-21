@@ -51,10 +51,11 @@
   }
   function icon(name, cls) {
     const s = document.createElementNS(SVGNS, 'svg');
-    s.setAttribute('class', 'ic' + (cls ? ' ' + cls : ''));
-    s.setAttribute('viewBox', '0 0 24 24');
+    const fa = window.FA_ICONS && window.FA_ICONS[name];
+    s.setAttribute('class', 'ic' + (fa ? ' ic-fa' : '') + (cls ? ' ' + cls : ''));
+    s.setAttribute('viewBox', fa ? fa.vb : '0 0 24 24');
     s.setAttribute('aria-hidden', 'true');
-    s.innerHTML = ICONS[name];
+    s.innerHTML = fa ? fa.svg : ICONS[name];
     return s;
   }
   // Mac shows ⌘⌥⇧; Windows and Linux show the names people expect.

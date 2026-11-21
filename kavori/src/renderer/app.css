@@ -121,3 +121,8 @@ html[data-motion="reduced"] .plate { transition: none !important; }
 html:not([data-platform="darwin"]) .tls { display: none; }
 html:not([data-platform="darwin"]) .titlebar { padding-left: 14px; padding-right: 150px; }
 html:not([data-platform="darwin"]) .win-title { margin-left: 2px; }
+
+/* Font Awesome glyphs are filled and span the whole viewBox, so inset them to match the app's icon sizes */
+.ic-fa { fill: currentColor; stroke: none; transform: scale(.84); }
+.ic-fa .fa-secondary { opacity: .4; }
+.swatch .ic-fa { transform: none; }

@@ -1,0 +1,27 @@
+{
+  "_comment": "Maps the app's icon names to Font Awesome icon names. `style` is the Font Awesome folder to read: solid, regular, light, thin, duotone, sharp-solid, sharp-regular ... (everything except solid needs Font Awesome Pro). Run `npm run icons` after changing this file.",
+  "style": "solid",
+  "icons": {
+    "back": "chevron-left",
+    "fwd": "chevron-right",
+    "reload": "arrow-rotate-right",
+    "sidebar": "table-columns",
+    "plus": "plus",
+    "x": "xmark",
+    "search": "magnifying-glass",
+    "shield": "shield-halved",
+    "sliders": "sliders",
+    "lock": "lock",
+    "edit": "pen",
+    "trash": "trash-can",
+    "ret": "rotate-left",
+    "check": "check",
+    "chevdown": "chevron-down",
+    "updown": "up-down",
+    "layers": "layer-group",
+    "sun": "sun",
+    "keyboard": "keyboard",
+    "terminal": "terminal",
+    "grip": "grip-vertical"
+  }
+}

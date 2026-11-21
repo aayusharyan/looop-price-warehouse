@@ -7,7 +7,8 @@
   "private": true,
   "scripts": {
     "start": "electron .",
-    "dist": "electron-builder --mac"
+    "dist": "electron-builder --mac",
+    "icons": "node scripts/build-icons.cjs"
   },
   "build": {
     "appId": "app.kavori.browser",
@@ -24,6 +25,7 @@
   },
   "devDependencies": {
     "electron": "^33.4.11",
-    "electron-builder": "^25.0.0"
+    "electron-builder": "^25.0.0",
+    "@fortawesome/fontawesome-free": "^7.0.0"
   }
 }
