@@ -57,7 +57,12 @@
     s.innerHTML = ICONS[name];
     return s;
   }
-  const kbd = (k) => h('span.kbd', k);
+  // Mac shows ⌘⌥⇧; Windows and Linux show the names people expect.
+  const MAC = ((window.bh && window.bh.platform) || 'darwin') === 'darwin';
+  const KEYS = { '⌘': 'Ctrl', '⌃': 'Ctrl', '⌥': 'Alt', '⇧': 'Shift', '⌘⌥S': 'Ctrl+Alt+S' };
+  const kbd = (k) => h('span.kbd', MAC ? k : (KEYS[k] || k));
+  /** Same idea for running text such as tooltips ("Toggle sidebar  ⌘⌥S"). */
+  const keysIn = (str) => (MAC ? str : str.replace(/[⌘⌃]/g, 'Ctrl+').replace(/⌥/g, 'Alt+').replace(/⇧/g, 'Shift+'));
   const kbds = (keys) => h('span.kbds', keys.map(kbd));
   const glyphOf = (name) => ((name || '').trim().charAt(0) || '?').toUpperCase();
   const tile = (g, size) => h('span.tile' + (size ? '.tile-' + size : '') + '.' + g.color, glyphOf(g.name));
@@ -72,6 +77,7 @@
   function applyLook(S) {
     const r = document.documentElement;
     r.dataset.theme = S.themeResolved;
+    r.dataset.platform = (window.bh && window.bh.platform) || 'darwin';
     r.dataset.density = S.density;
     const reduce = S.motion === 'reduced' || (S.motion === 'system' && matchMedia('(prefers-reduced-motion: reduce)').matches);
     r.dataset.motion = reduce ? 'reduced' : 'full';
@@ -79,5 +85,5 @@
 
   function mountSprite() { /* icons are inlined per use; nothing to mount */ }
 
-  window.UI = { h, add, icon, kbd, kbds, glyphOf, tile, accelKeys, applyLook, mountSprite, ICONS };
+  window.UI = { h, add, icon, kbd, kbds, keysIn, MAC, glyphOf, tile, accelKeys, applyLook, mountSprite, ICONS };
 })();

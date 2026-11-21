@@ -39,6 +39,8 @@
   }
   function hideToast() { toastEl && toastEl.classList.add('out'); }
 
+  const siteOf = (u) => { try { return new URL(u).host; } catch (_) { return ''; } };
+
   /* ------------------------------------------------------------- palette */
   function openPalette() {
     mode = 'palette';
@@ -75,7 +77,7 @@
       const ts = [];
       S.groups.forEach((g, gi) => g.tabs.forEach((t) => { if (has(t.title) || has(g.name) || has(t.url)) ts.push({ g, t, gi }); }));
       rows_add('Open tabs', ts.slice(0, 5).map((x) => ({
-        mark: x.g, label: x.t.title, group: x.g.name, host: x.t.url ? x.t.url.replace(/^https?:\/\//, '').slice(0, 34) : '', run: () => call('tab:open', x.g.id, x.t.id) })), sections);
+        mark: x.g, label: x.t.title, group: x.g.name, host: siteOf(x.t.url), run: () => call('tab:open', x.g.id, x.t.id) })), sections);
       const A = [];
       if (ag) {
         A.push({ ic: 'plus', label: `New tab in ${ag.name}`, keys: ['⌘', 'T'], run: () => call('tab:new', ag.id) });

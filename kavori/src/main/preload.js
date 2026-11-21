@@ -8,6 +8,8 @@ for (const ch of ['state', 'cmd', 'overlay', 'pane']) {
 }
 
 contextBridge.exposeInMainWorld('bh', {
+  // KAVORI_FAKE_PLATFORM lets the store-screenshot script render the Windows layout on any OS.
+  platform: process.env.KAVORI_FAKE_PLATFORM || process.platform,
   call: (channel, ...args) => ipcRenderer.invoke(channel, ...args),
   on: (channel, fn) => { listeners[channel].add(fn); return () => listeners[channel].delete(fn); }
 });

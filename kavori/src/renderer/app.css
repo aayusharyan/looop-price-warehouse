@@ -116,3 +116,8 @@ html[data-motion="reduced"] .plate { transition: none !important; }
 .nt p { color: var(--text-3); display: flex; gap: 6px; align-items: center; justify-content: center; animation: pane-in var(--d-4) var(--ease-out) .1s both; }
 
 [hidden] { display: none !important; }
+
+/* Windows and Linux: native caption buttons sit at the right, no traffic-light gap at the left */
+html:not([data-platform="darwin"]) .tls { display: none; }
+html:not([data-platform="darwin"]) .titlebar { padding-left: 14px; padding-right: 150px; }
+html:not([data-platform="darwin"]) .win-title { margin-left: 2px; }

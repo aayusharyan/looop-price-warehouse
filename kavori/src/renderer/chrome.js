@@ -36,7 +36,7 @@
     tipTimer = setTimeout(() => {
       const r = t.getBoundingClientRect();
       tipShown = true;
-      call('ui:tip', { text: t.dataset.tip, side, x: side === 'r' ? r.right + 10 : r.left + r.width / 2, y: side === 'r' ? r.top + r.height / 2 : r.bottom + 8 });
+      call('ui:tip', { text: UI.keysIn(t.dataset.tip), side, x: side === 'r' ? r.right + 10 : r.left + r.width / 2, y: side === 'r' ? r.top + r.height / 2 : r.bottom + 8 });
     }, 450);
   });
   document.addEventListener('mousedown', hideTip);

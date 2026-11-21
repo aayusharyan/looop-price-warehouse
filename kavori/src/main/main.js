@@ -231,6 +231,13 @@ function toast(text, action, cmd) {
   toastTimer = setTimeout(() => { if (overlayMode === 'toast') { overlay.webContents.send('overlay', { type: 'toast-hide' }); setTimeout(() => overlayMode === 'toast' && setOverlay('none'), 260); } }, 5000);
 }
 
+
+const IS_MAC = process.platform === 'darwin';
+const barColors = () => (S.settings.themeResolved === 'dark' ? { color: '#141518', symbolColor: '#B3B9C3' } : { color: '#EDEEF1', symbolColor: '#4B515C' });
+// macOS draws traffic lights itself; Windows and Linux get native caption buttons drawn over our titlebar.
+const titleBar = () => (IS_MAC ? { titleBarStyle: 'hidden', trafficLightPosition: { x: 16, y: 15 } } : { titleBarStyle: 'hidden', titleBarOverlay: { ...barColors(), height: 44 }, autoHideMenuBar: true });
+function syncTitleBars() { if (IS_MAC) return; for (const w of [win, settingsWin]) if (w && !w.isDestroyed() && w.setTitleBarOverlay) w.setTitleBarOverlay({ ...barColors(), height: 44 }); }
+
 /* ------------------------------------------------------------------ windows */
 function resolveTheme() {
   const t = S.settings.theme;
@@ -241,7 +248,7 @@ function resolveTheme() {
 function createWindow() {
   win = new BrowserWindow({
     width: 1280, height: 800, minWidth: 720, minHeight: 480,
-    titleBarStyle: 'hidden', trafficLightPosition: { x: 16, y: 15 },
+    ...titleBar(),
     icon: path.join(__dirname, '..', 'renderer', 'icon.png'),
     backgroundColor: S.settings.themeResolved === 'dark' ? '#141518' : '#EDEEF1',
     vibrancy: undefined, show: false,
@@ -265,7 +272,7 @@ function openSettings(pane, gid) {
   if (settingsWin && !settingsWin.isDestroyed()) { settingsWin.focus(); if (pane) settingsWin.webContents.send('pane', pane, gid); return; }
   settingsWin = new BrowserWindow({
     width: 940, height: 640, minWidth: 860, minHeight: 560, resizable: true, fullscreenable: false,
-    titleBarStyle: 'hidden', trafficLightPosition: { x: 16, y: 15 }, title: 'Settings',
+    ...titleBar(), title: 'Settings',
     backgroundColor: S.settings.themeResolved === 'dark' ? '#141518' : '#EDEEF1',
     webPreferences: { preload: PRELOAD, contextIsolation: true, sandbox: true }
   });
@@ -393,7 +400,7 @@ H('reopen', () => reopen());
 
 H('settings:set', (patch) => {
   Object.assign(S.settings, patch);
-  if ('theme' in patch) resolveTheme();
+  if ('theme' in patch) { resolveTheme(); syncTitleBars(); }
   if ('proxy' in patch || 'ua' in patch) readySessions.forEach(applyNet);
   if ('shortcuts' in patch) buildMenu();
   push();
@@ -447,7 +454,7 @@ app.whenReady().then(() => {
   S = store.load();
   if (S.settings.startup === 'fresh') S.groups.forEach((g) => { g.tabs = [{ id: uid(), title: 'New tab', url: '' }]; g.activeTab = 0; });
   resolveTheme();
-  nativeTheme.on('updated', () => { resolveTheme(); push(); });
+  nativeTheme.on('updated', () => { resolveTheme(); syncTitleBars(); push(); });
   buildMenu();
   if (process.platform === 'darwin' && app.dock) app.dock.setIcon(path.join(__dirname, '..', 'renderer', 'icon.png'));
   createWindow();
