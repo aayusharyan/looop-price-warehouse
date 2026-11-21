@@ -1,0 +1,51 @@
+---
+import Legal from '../layouts/Legal.astro';
+import { legal, site } from '../config';
+---
+<Legal title="Terms of Service" intro="These terms cover buying Kavori and using this website. The software itself is licensed under the separate License Agreement.">
+  <div class="toc">
+    <a href="/license">License Agreement</a><a href="/refunds">Refund Policy</a><a href="/privacy">Privacy Policy</a>
+  </div>
+
+  <h2>1. Who we are</h2>
+  <p>Kavori is made and sold by {legal.company} ("we", "us"), {legal.address}. By buying Kavori or using this website you agree to these terms. If you don't agree, please don't buy or use it.</p>
+
+  <h2>2. Buying Kavori</h2>
+  <p>The price is shown at checkout in your local currency where available. It includes applicable taxes, or the taxes are added at checkout. You pay once. There is no subscription and nothing renews.</p>
+  <p>Payments are processed by {legal.paymentProvider}. [CONFIRM: say whether the payment provider is the seller of record or only processes payments for us.] After payment you get a download link and a license key by email. Delivery is digital and normally immediate.</p>
+
+  <h2>3. License and updates</h2>
+  <p>What you may do with Kavori is set out in the <a href="/license">License Agreement</a>.</p>
+  <p>We plan to make every future version of Kavori free for people who have bought it, and that is how we run the product today. If we ever stop developing Kavori or change this approach, the versions you already have keep working and stay licensed to you.</p>
+
+  <h2>4. Refunds</h2>
+  <p>You can get a refund within {site.refundDays} days of purchase. The <a href="/refunds">Refund Policy</a> explains how.</p>
+
+  <h2>5. Using Kavori responsibly</h2>
+  <p>Kavori lets you stay logged in to several accounts on the same site. You are responsible for following the rules of the sites and services you use it with. Some services limit multiple accounts, automation or sharing, and breaking those rules can get an account restricted. We aren't responsible for that.</p>
+  <p>Don't use Kavori to break the law, to attack or abuse other people's systems, or to get around a ban or restriction that a site has put on you.</p>
+
+  <h2>6. Other companies' services and names</h2>
+  <p>Kavori is not made by, affiliated with or endorsed by WhatsApp, Google, Meta or any other service it can open. Their names belong to them. We refer to other products only to describe what Kavori works with or how it compares, and our comparisons are our own view based on public information at the time we wrote them.</p>
+
+  <h2>7. Support</h2>
+  <p>Email {legal.email} and we'll help as best we can. We don't promise a response time or a fix for every problem.</p>
+
+  <h2>8. Warranty disclaimer</h2>
+  <p>Kavori is provided "as is". We work hard to make it reliable, but we don't promise that it will be error-free, uninterrupted or suited to a particular purpose, or that every website will work in it. This doesn't affect any rights you have under consumer law that can't be excluded.</p>
+
+  <h2>9. Limit of liability</h2>
+  <p>To the extent the law allows, we aren't liable for indirect or consequential losses, such as lost profits, lost data or loss of access to an account on another service. Our total liability for any claim relating to Kavori is limited to the amount you paid for it. Nothing in these terms limits liability that can't be limited by law, including for death or personal injury caused by negligence, or for fraud.</p>
+
+  <h2>10. Ending your license</h2>
+  <p>You can stop using Kavori at any time. We can end your license if you seriously or repeatedly break these terms or the License Agreement. We'll tell you why first where that's possible. If we end it without that being your fault, we'll refund you.</p>
+
+  <h2>11. Governing law</h2>
+  <p>These terms are governed by the law of {legal.jurisdiction}. If you are a consumer, you also keep the protection of the mandatory consumer law where you live, and you can bring a claim in the courts of your country.</p>
+
+  <h2>12. Changes to these terms</h2>
+  <p>We may update these terms. New terms apply to purchases made after the date above. They won't take away rights you already have under a purchase you made earlier.</p>
+
+  <h2>13. Contact</h2>
+  <p>{legal.company}, {legal.address}. Email: {legal.email}.</p>
+</Legal>

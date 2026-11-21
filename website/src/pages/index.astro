@@ -1,7 +1,8 @@
 ---
 import Base from '../layouts/Base.astro';
 import Icon from '../components/Icon.astro';
-import ThemeToggle from '../components/ThemeToggle';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
 import HeroDemo from '../components/HeroDemo';
 import JarLab from '../components/JarLab';
 import Faq from '../components/Faq';
@@ -26,17 +27,7 @@ const secs = [
 ];
 ---
 <Base>
-  <header class="nav">
-    <div class="wrap nav-in">
-      <a class="brand" href="#top" aria-label="Kavori home"><span class="brand-mark">K</span>Kavori</a>
-      <nav class="nav-links" aria-label="Sections">
-        <a href="#why">Why Kavori</a><a href="#features">Features</a><a href="#security">Security</a><a href="#compare">Compare</a><a href="#pricing">Pricing</a>
-      </nav>
-      <span class="nav-gap"></span>
-      <ThemeToggle client:load />
-      <a class="btn btn-primary btn-sm" href="#pricing">Get Kavori</a>
-    </div>
-  </header>
+  <Nav />
 
   <main id="top">
     <!-- Hero -->
@@ -140,7 +131,7 @@ const secs = [
               {['Mac, Windows and Linux', 'Unlimited groups and tabs', 'Free updates for every future version', 'Security fixes included'].map((t) => <li><Icon name="check" />{t}</li>)}
             </ul>
             <a class="btn" href={site.buyUrl}>Buy Kavori<Icon name="arrow" class="ic arrow" /></a>
-            <p class="fine">{site.refund}</p>
+            <p class="fine">{site.refundDays}-day refund. <a href="/refunds">Details</a><br />By buying you agree to the <a href="/terms">Terms</a> and <a href="/license">License</a>.</p>
           </div>
         </div>
       </div>
@@ -214,12 +205,5 @@ const secs = [
     </section>
   </main>
 
-  <footer class="foot">
-    <div class="wrap foot-in">
-      <a class="brand" href="#top"><span class="brand-mark">K</span>Kavori</a>
-      <span>© {site.year} {site.company}</span>
-      <span class="gap"></span>
-      <a href="#">Privacy</a><a href="#">Terms</a><a href="#">Contact</a>
-    </div>
-  </footer>
+  <Footer />
 </Base>

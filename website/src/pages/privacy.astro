@@ -1,0 +1,58 @@
+---
+import Legal from '../layouts/Legal.astro';
+import { legal } from '../config';
+---
+<Legal title="Privacy Policy" intro="The short version: the Kavori app doesn't collect data about you, this website doesn't use cookies or analytics, and the only personal information we hold is what you give us when you buy or write to us.">
+  <h2>Who we are</h2>
+  <p>{legal.company} ("we", "us") makes Kavori and runs this website. We are the controller of the personal data described below. You can reach us at {legal.email} or by post at {legal.address}.</p>
+
+  <h2>The Kavori app</h2>
+  <p>Everything you do in Kavori stays on your computer. Your logins, cookies, browsing history, tabs, settings and per-group permission choices are stored in your user profile folder. We can't see them and we don't receive copies.</p>
+  <p>The app has no analytics, no crash reporting and no advertising. We don't use trackers, and there is no account to create.</p>
+  <p>The app connects to the websites you open, and those sites set their own cookies inside the group you opened them in. What they do with your data is covered by their policies, not this one. [CONFIRM BEFORE LAUNCH: describe any connection the app makes to our servers, such as update or license checks, and exactly what it sends. If there are none, say so here.]</p>
+
+  <h2>This website</h2>
+  <ul>
+    <li>No cookies, no analytics and no third-party scripts. Fonts are served from this site.</li>
+    <li>Your light or dark theme choice is saved in your browser's local storage under the name <code>kavori-theme</code>. It stays on your device and is never sent to us.</li>
+    <li>Our hosting provider, {legal.host}, keeps standard server logs (IP address, time, page requested, browser type) for security and to keep the site running. We don't use them to identify you.</li>
+  </ul>
+
+  <h2>When you buy</h2>
+  <p>Payments are handled by {legal.paymentProvider}. Your card or bank details go to them and never reach us. From them we receive the details we need to complete your order:</p>
+  <div class="box"><table>
+    <thead><tr><th>What we get</th><th>Why</th><th>Legal basis (GDPR)</th></tr></thead>
+    <tbody>
+      <tr><td>Name, email address, country</td><td>To deliver your download and license key and to contact you about your order</td><td>Performing our contract with you</td></tr>
+      <tr><td>Order number, amount, tax details, payment status</td><td>Accounting, tax and fraud prevention</td><td>Legal obligation; legitimate interest in preventing fraud</td></tr>
+      <tr><td>License key and the email it's tied to</td><td>To verify your purchase and handle support or refunds</td><td>Performing our contract with you</td></tr>
+    </tbody>
+  </table></div>
+  <p>We keep order records for as long as tax and accounting law requires. Other order information is deleted when we no longer need it to support you.</p>
+
+  <h2>When you contact us</h2>
+  <p>If you email us, we keep your message and our reply so we can help you and follow up. We use it for nothing else.</p>
+
+  <h2>Who we share data with</h2>
+  <p>Only the service providers that help us run the business: {legal.paymentProvider} for payments, {legal.host} for hosting, and our email provider for support messages. They may only use the data to provide their service to us. We also disclose data where the law requires it. We don't sell your personal data and we don't share it for advertising.</p>
+
+  <h2>Transfers outside your country</h2>
+  <p>Some of these providers may process data in other countries. Where that happens, we rely on safeguards the law recognises, such as standard contractual clauses.</p>
+
+  <h2>Your rights</h2>
+  <p>Depending on where you live, you can ask us to give you a copy of your data, correct it, delete it, restrict or stop how we use it, or send it to you in a portable format. You can also withdraw consent where we rely on it, and complain to your local data protection authority.</p>
+  <p>California residents: we don't sell or share personal information as those terms are defined in the CCPA, and we don't discriminate against anyone for using these rights.</p>
+  <p>To use any of these rights, email {legal.email}. We'll reply within the time the law allows, and we may need to verify it's you first.</p>
+
+  <h2>Security</h2>
+  <p>We collect very little, which limits what could go wrong. The data we do hold is kept with providers that use encryption and access controls. No system is perfectly secure, so we can't promise absolute security. If a breach affects you, we'll tell you as the law requires.</p>
+
+  <h2>Children</h2>
+  <p>Kavori and this website are not aimed at children under 16, and we don't knowingly collect their data.</p>
+
+  <h2>Changes</h2>
+  <p>If we change this policy in a way that matters, we'll update the date above and, for significant changes, tell customers by email.</p>
+
+  <h2>Contact</h2>
+  <p>{legal.company}, {legal.address}. Email: {legal.email}.</p>
+</Legal>

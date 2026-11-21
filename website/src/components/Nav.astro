@@ -1,0 +1,14 @@
+---
+import ThemeToggle from './ThemeToggle';
+---
+<header class="nav">
+  <div class="wrap nav-in">
+    <a class="brand" href="/" aria-label="Kavori home"><span class="brand-mark">K</span>Kavori</a>
+    <nav class="nav-links" aria-label="Sections">
+      <a href="/#why">Why Kavori</a><a href="/#features">Features</a><a href="/#security">Security</a><a href="/#compare">Compare</a><a href="/#pricing">Pricing</a>
+    </nav>
+    <span class="nav-gap"></span>
+    <ThemeToggle client:load />
+    <a class="btn btn-primary btn-sm" href="/#pricing">Get Kavori</a>
+  </div>
+</header>

@@ -1,0 +1,32 @@
+---
+import Legal from '../layouts/Legal.astro';
+import { legal, site } from '../config';
+---
+<Legal title="Refund Policy" intro={`You can get a full refund within ${site.refundDays} days of buying Kavori, for any reason.`}>
+  <h2>How to ask</h2>
+  <p>Email {legal.email} from the address you used to buy, and include your order number if you have it. A short note is fine, and you don't have to explain why.</p>
+
+  <h2>What happens next</h2>
+  <ul>
+    <li>We refund the full price, including any tax you paid, to the card or account you paid with.</li>
+    <li>Refunds are usually issued within a few days. How long it takes to show up depends on your bank or card company, and can be up to 5 to 10 business days.</li>
+    <li>Once refunded, your license ends and you should stop using Kavori and delete it. Your own data stays on your computer, since we never had it.</li>
+  </ul>
+
+  <h2>After {site.refundDays} days</h2>
+  <p>We don't refund after the window, except in these cases:</p>
+  <ul>
+    <li>You were charged twice for the same purchase.</li>
+    <li>Kavori has a fault that we can't fix after reasonable effort.</li>
+    <li>The law where you live gives you a right to a refund.</li>
+  </ul>
+
+  <h2>Your legal rights</h2>
+  <p>This policy adds to your legal rights and doesn't replace them. For example, in the EU and UK there is a 14-day right to withdraw from an online purchase, which can end once a digital download starts if you agreed to that when you bought. Our {site.refundDays}-day refund is available regardless, so you don't need to rely on that rule.</p>
+
+  <h2>Chargebacks</h2>
+  <p>If something is wrong with a charge, please email us first. We can usually fix it faster than your bank can, and we'll refund you if you're entitled to it.</p>
+
+  <h2>Contact</h2>
+  <p>{legal.company}, {legal.address}. Email: {legal.email}.</p>
+</Legal>

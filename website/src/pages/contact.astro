@@ -1,0 +1,17 @@
+---
+import Legal from '../layouts/Legal.astro';
+import { legal } from '../config';
+---
+<Legal title="Contact" updated={false}>
+  <h2>Support, orders and refunds</h2>
+  <p>Email <a href={`mailto:${legal.email}`}>{legal.email}</a>. Include your order email so we can find your purchase. We read everything and reply as soon as we can.</p>
+
+  <h2>Privacy requests</h2>
+  <p>To see, correct or delete your data, email <a href={`mailto:${legal.email}`}>{legal.email}</a>. See the <a href="/privacy">Privacy Policy</a> for what we hold.</p>
+
+  <h2>Report a security problem</h2>
+  <p>If you think you've found a vulnerability in Kavori, email <a href={`mailto:${legal.securityEmail}`}>{legal.securityEmail}</a>. Tell us what you found and how to reproduce it. Please give us a reasonable time to fix it before you share it publicly. We'll acknowledge your report, keep you updated and credit you if you'd like.</p>
+
+  <h2>Post</h2>
+  <p>{legal.company}<br />{legal.address}</p>
+</Legal>

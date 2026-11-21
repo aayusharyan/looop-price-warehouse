@@ -1,0 +1,32 @@
+---
+import Legal from '../layouts/Legal.astro';
+import { legal } from '../config';
+---
+<Legal title="Legal notices" updated={false}>
+  <h2>Who runs this site</h2>
+  <div class="box"><table><tbody>
+    <tr><th>Company</th><td>{legal.company}</td></tr>
+    <tr><th>Registration number</th><td>{legal.registration}</td></tr>
+    <tr><th>Tax ID</th><td>{legal.taxId}</td></tr>
+    <tr><th>Address</th><td>{legal.address}</td></tr>
+    <tr><th>Email</th><td>{legal.email}</td></tr>
+  </tbody></table></div>
+
+  <h2>Other companies' names</h2>
+  <p>WhatsApp, Gmail, Google, Meta, Firefox, Mozilla, Ferdium, Franz, Wavebox and other product names on this site belong to their owners. Kavori isn't affiliated with or endorsed by any of them. The comparison on the home page is our own view, based on public information at the time we wrote it, and may be out of date.</p>
+
+  <h2>Software in Kavori</h2>
+  <p>Kavori is built on open-source software. Each part is licensed by its authors under its own terms. The full license texts are included in the app's installation folder.</p>
+  <div class="box"><table>
+    <thead><tr><th>Component</th><th>License</th></tr></thead>
+    <tbody>
+      <tr><td>Electron</td><td>MIT License</td></tr>
+      <tr><td>Chromium, and the libraries it includes</td><td>BSD-style license and others, listed in <code>LICENSES.chromium.html</code></td></tr>
+      <tr><td>Geist and Geist Mono typefaces (Vercel, with basement.studio)</td><td>SIL Open Font License 1.1</td></tr>
+    </tbody>
+  </table></div>
+  <p>[CONFIRM BEFORE LAUNCH: update this list from the final build's dependencies.]</p>
+
+  <h2>Other pages</h2>
+  <div class="toc"><a href="/privacy">Privacy Policy</a><a href="/terms">Terms of Service</a><a href="/license">License Agreement</a><a href="/refunds">Refund Policy</a><a href="/contact">Contact</a></div>
+</Legal>

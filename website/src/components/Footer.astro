@@ -1,0 +1,12 @@
+---
+import { site, legal } from '../config';
+const links = [['Privacy', '/privacy'], ['Terms', '/terms'], ['License', '/license'], ['Refunds', '/refunds'], ['Legal', '/legal'], ['Contact', '/contact']];
+---
+<footer class="foot">
+  <div class="wrap foot-in">
+    <a class="brand" href="/"><span class="brand-mark">K</span>Kavori</a>
+    <span>© {site.year} {legal.company}</span>
+    <span class="gap"></span>
+    {links.map(([t, h]) => <a href={h}>{t}</a>)}
+  </div>
+</footer>

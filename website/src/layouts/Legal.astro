@@ -1,0 +1,19 @@
+---
+import Base from './Base.astro';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+import { legal } from '../config';
+const { title, intro, updated = true } = Astro.props as { title: string; intro?: string; updated?: boolean };
+---
+<Base title={`${title} · Kavori`}>
+  <Nav />
+  <main class="legal">
+    <div class="wrap">
+      <h1>{title}</h1>
+      {updated && <p class="meta">Last updated {legal.updated}</p>}
+      {intro && <p class="summary">{intro}</p>}
+      <slot />
+    </div>
+  </main>
+  <Footer />
+</Base>

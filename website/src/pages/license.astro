@@ -1,0 +1,38 @@
+---
+import Legal from '../layouts/Legal.astro';
+import { legal } from '../config';
+---
+<Legal title="License Agreement" intro="Buying Kavori gives you a license to use it, not ownership of the software. This page explains what you can and can't do.">
+  <h2>1. The license</h2>
+  <p>When you buy Kavori, {legal.company} gives you a personal, non-exclusive, non-transferable license to install and use Kavori on up to {legal.devices} computers that you own or control, for personal or business use. The license has no end date and includes every update we release for it.</p>
+
+  <h2>2. What you can't do</h2>
+  <ul>
+    <li>Copy or redistribute Kavori, or sell, rent, lend or sublicense it.</li>
+    <li>Share or publish your license key.</li>
+    <li>Reverse engineer, decompile or disassemble Kavori, except where the law gives you that right regardless of this agreement.</li>
+    <li>Remove copyright or license notices, or the notices of the components that come with it.</li>
+    <li>Use Kavori to provide a competing product or a service to others that is based on it.</li>
+  </ul>
+
+  <h2>3. Ownership</h2>
+  <p>We keep all rights in Kavori that this agreement doesn't give you. Your data stays yours: the logins, cookies, history and files in your groups belong to you, and we don't claim any rights in them.</p>
+
+  <h2>4. Third-party and open-source components</h2>
+  <p>Kavori includes software from other people, including Chromium and Electron. Those parts are licensed under their own terms, which take priority over this agreement for those parts. They are listed on the <a href="/legal">Legal notices</a> page.</p>
+
+  <h2>5. No warranty and limit of liability</h2>
+  <p>Sections 8 and 9 of the <a href="/terms">Terms of Service</a> apply to this license.</p>
+
+  <h2>6. Ending the license</h2>
+  <p>You can end this agreement at any time by deleting Kavori. We can end it if you materially break it, as described in the <a href="/terms">Terms of Service</a>. When it ends, you must stop using Kavori and delete your copies. Sections 2, 3 and 5 continue after that.</p>
+
+  <h2>7. Export rules</h2>
+  <p>You agree to follow the export control and sanctions laws that apply to you when you use Kavori.</p>
+
+  <h2>8. Governing law</h2>
+  <p>This agreement is governed by the law of {legal.jurisdiction}, subject to the consumer protections described in the Terms of Service.</p>
+
+  <h2>9. Contact</h2>
+  <p>Questions about this license: {legal.email}.</p>
+</Legal>
