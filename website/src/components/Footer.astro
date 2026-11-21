@@ -4,7 +4,7 @@ const links = [['Privacy', '/privacy'], ['Terms', '/terms'], ['License', '/licen
 ---
 <footer class="foot">
   <div class="wrap foot-in">
-    <a class="brand" href="/"><span class="brand-mark">K</span>Kavori</a>
+    <a class="brand" href="/"><img class="brand-mark" src="/icon.svg" alt="" width="30" height="30" />Kavori</a>
     <span>© {site.year} {legal.company}</span>
     <span class="gap"></span>
     {links.map(([t, h]) => <a href={h}>{t}</a>)}

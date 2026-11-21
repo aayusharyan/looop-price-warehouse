@@ -242,6 +242,7 @@ function createWindow() {
   win = new BrowserWindow({
     width: 1280, height: 800, minWidth: 720, minHeight: 480,
     titleBarStyle: 'hidden', trafficLightPosition: { x: 16, y: 15 },
+    icon: path.join(__dirname, '..', 'renderer', 'icon.png'),
     backgroundColor: S.settings.themeResolved === 'dark' ? '#141518' : '#EDEEF1',
     vibrancy: undefined, show: false,
     webPreferences: { preload: PRELOAD, contextIsolation: true, sandbox: true }
@@ -448,6 +449,7 @@ app.whenReady().then(() => {
   resolveTheme();
   nativeTheme.on('updated', () => { resolveTheme(); push(); });
   buildMenu();
+  if (process.platform === 'darwin' && app.dock) app.dock.setIcon(path.join(__dirname, '..', 'renderer', 'icon.png'));
   createWindow();
   setInterval(() => { // suspend idle groups to free memory
     const active = activeGroup();

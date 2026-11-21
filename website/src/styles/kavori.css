@@ -65,7 +65,7 @@
 .nav { position: sticky; top: 0; z-index: 50; background: color-mix(in srgb, var(--bg) 82%, transparent); backdrop-filter: saturate(1.4) blur(14px); -webkit-backdrop-filter: saturate(1.4) blur(14px); border-bottom: 1px solid transparent; transition: border-color var(--d3); }
 .nav-in { display: flex; align-items: center; gap: 28px; height: 68px; }
 .brand { display: inline-flex; align-items: center; gap: 10px; font: 600 18px/1 var(--font); letter-spacing: -.02em; }
-.brand-mark { width: 30px; height: 30px; border-radius: 9px; display: inline-flex; align-items: center; justify-content: center; background: var(--accent); color: #fff; font: 700 16px/1 var(--font); box-shadow: inset 0 1px 0 rgba(255,255,255,.2), 0 2px 6px rgba(51,87,216,.35); transition: transform var(--d3) var(--ease-spring); }
+.brand-mark { width: 30px; height: 30px; border-radius: 8px; display: block; box-shadow: 0 2px 6px rgba(20,22,26,.25); transition: transform var(--d3) var(--ease-spring); }
 .brand:hover .brand-mark { transform: rotate(-8deg) scale(1.08); }
 .nav-links { display: flex; gap: 4px; margin-left: 8px; }
 .nav-links a { padding: 6px 12px; border-radius: 8px; color: var(--text-2); font-size: 14.5px; font-weight: 500; transition: background var(--d2), color var(--d2); }

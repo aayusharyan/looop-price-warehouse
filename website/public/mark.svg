@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-label="Kavori">
+  <g transform="translate(-1 0) translate(64 64) scale(.84) translate(-64 -64)" fill="none" stroke-linecap="round" stroke-width="18">
+    <line x1="39" y1="26" x2="39" y2="102" stroke="#3F74E8"/>
+    <line x1="63" y1="52" x2="91" y2="24" stroke="#E5573A"/>
+    <line x1="63" y1="76" x2="91" y2="104" stroke="#25A060"/>
+  </g>
+</svg>

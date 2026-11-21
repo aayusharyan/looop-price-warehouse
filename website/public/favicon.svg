@@ -1,1 +1,9 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><rect width="32" height="32" rx="9" fill="#3357D8"/><text x="16" y="23" font-family="system-ui,sans-serif" font-size="19" font-weight="700" text-anchor="middle" fill="#fff">K</text></svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-label="Kavori">
+  <defs><linearGradient id="bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2A2E36"/><stop offset="1" stop-color="#14161A"/></linearGradient></defs>
+  <rect width="128" height="128" rx="29" fill="url(#bg)"/>
+  <g transform="translate(-1 0) translate(64 64) scale(.84) translate(-64 -64)" fill="none" stroke-linecap="round" stroke-width="18">
+    <line x1="39" y1="26" x2="39" y2="102" stroke="#3F74E8"/>
+    <line x1="63" y1="52" x2="91" y2="24" stroke="#E5573A"/>
+    <line x1="63" y1="76" x2="91" y2="104" stroke="#25A060"/>
+  </g>
+</svg>
