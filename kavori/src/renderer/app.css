@@ -1,6 +1,6 @@
 @font-face { font-family: "Geist"; font-weight: 100 900; font-display: block; src: url("fonts/geist-latin-wght-normal.woff2") format("woff2"); }
 @font-face { font-family: "Geist Mono"; font-weight: 100 900; font-display: block; src: url("fonts/geist-mono-latin-wght-normal.woff2") format("woff2"); }
-/* Bulkhead app layer on top of the Porcelain design system (porcelain.css is the design's, verbatim). */
+/* Kavori app layer on top of the Porcelain design system (porcelain.css is the design's, verbatim). */
 html, body { height: 100%; overflow: hidden; background: var(--bg-window); }
 [data-theme] { background: var(--bg-window); }
 html[data-theme="light"] { color-scheme: light; }

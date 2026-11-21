@@ -193,7 +193,7 @@
       $('loadbar').hidden = true;
       tabMap.forEach((r) => r.el.remove()); tabMap.clear();
     }
-    document.title = g ? `${g.name} — Bulkhead` : 'Bulkhead';
+    document.title = g ? `${g.name} — Kavori` : 'Kavori';
   }
 
   /* ------------------------------------------------------------- first run */
@@ -203,7 +203,7 @@
       h('div.sk', { style: { width: '90%' } }), h('div.sk', { style: { width: '70%' } }), h('div.sk', { style: { width: '80%' } }),
       h('div.mini-f', icon('lock', 'ic-sm'), 'Own logins and storage'));
     $('empty').append(h('div.empty-in',
-      h('p.eyebrow', 'Welcome to Bulkhead'),
+      h('p.eyebrow', 'Welcome to Kavori'),
       h('h1.empty-h', 'One browser. Every account, kept apart.'),
       h('p.empty-p', 'A group is a sealed browser session with its own logins, cookies, storage and cache. Open the same site in three groups and stay signed in as three different people, side by side.'),
       h('div.empty-act',

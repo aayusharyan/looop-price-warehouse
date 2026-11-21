@@ -182,7 +182,7 @@
       swatches.forEach((s, i) => s.setAttribute('aria-pressed', String(COLORS[i][0] === v.color)));
       thumb.className = 'thumb at-' + (v.persistent ? 0 : 1);
       segBtns.forEach((b, i) => b.setAttribute('aria-pressed', String((i === 0) === v.persistent)));
-      desc.textContent = v.persistent ? 'Logins, cookies and cache are kept between launches.' : 'Everything in this group is wiped when you quit Bulkhead.';
+      desc.textContent = v.persistent ? 'Logins, cookies and cache are kept between launches.' : 'Everything in this group is wiped when you quit Kavori.';
       sw.setAttribute('aria-checked', String(v.tp));
       create.classList.toggle('is-disabled', !name);
     }

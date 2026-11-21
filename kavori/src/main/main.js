@@ -7,7 +7,7 @@ const store = require('./store');
 const R = (f) => path.join(__dirname, '..', 'renderer', f);
 const PRELOAD = path.join(__dirname, 'preload.js');
 const SIDE_RAIL = 56, SIDE_FULL = 244, HOT = 6;
-const CHROME_UA = (ua) => ua.replace(/\sElectron\/\S+/, '').replace(/\sbulkhead\/\S+/i, '').replace(/\sBulkhead\/\S+/, '');
+const CHROME_UA = (ua) => ua.replace(/\sElectron\/\S+/, '').replace(/\skavori\/\S+/i, '').replace(/\sKavori\/\S+/, '');
 
 let win = null, overlay = null, settingsWin = null;
 let S = null;                       // persisted state
@@ -282,7 +282,7 @@ const acc = (id) => S.settings.shortcuts[id];
 function buildMenu() {
   const groupItems = S.groups.slice(0, 9).map((g, i) => ({ label: g.name, accelerator: `CmdOrCtrl+${i + 1}`, click: () => selectGroup(i) }));
   Menu.setApplicationMenu(Menu.buildFromTemplate([
-    { label: 'Bulkhead', submenu: [
+    { label: 'Kavori', submenu: [
       { role: 'about' }, { type: 'separator' },
       { label: 'Settings…', accelerator: 'CmdOrCtrl+,', click: () => openSettings() },
       { type: 'separator' }, { role: 'services' }, { type: 'separator' }, { role: 'hide' }, { role: 'hideOthers' }, { role: 'unhide' }, { type: 'separator' }, { role: 'quit' } ] },
@@ -441,7 +441,7 @@ H('ui:overlay-done', () => { if (overlayMode === 'toast' || overlayMode === 'tip
 H('platform', () => ({ platform: process.platform, version: app.getVersion() }));
 
 /* -------------------------------------------------------------------- boot */
-app.setName('Bulkhead');
+app.setName('Kavori');
 app.whenReady().then(() => {
   S = store.load();
   if (S.settings.startup === 'fresh') S.groups.forEach((g) => { g.tabs = [{ id: uid(), title: 'New tab', url: '' }]; g.activeTab = 0; });

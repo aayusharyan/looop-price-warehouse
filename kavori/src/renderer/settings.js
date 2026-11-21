@@ -73,10 +73,10 @@
 
   const PANE = {
     general: () => [
-      ...title('General', 'How Bulkhead starts, and where links and notifications go.'),
+      ...title('General', 'How Kavori starts, and where links and notifications go.'),
       section('Startup'),
       card(
-        row('When Bulkhead opens', null, select(() => [{ v: 'restore', label: 'Restore all groups and tabs' }, { v: 'fresh', label: 'Start with a new tab in each group' }], () => S.settings.startup, (v) => set({ startup: v }))),
+        row('When Kavori opens', null, select(() => [{ v: 'restore', label: 'Restore all groups and tabs' }, { v: 'fresh', label: 'Start with a new tab in each group' }], () => S.settings.startup, (v) => set({ startup: v }))),
         row('Default group', 'Where new windows and unmatched links start.', select(groupOpts, () => S.settings.defaultGroup || (S.groups[0] && S.groups[0].id), (v) => set({ defaultGroup: v })))),
       section('Links'),
       card(row('Open links from other apps in', 'Applies to links you click in Mail, Messages and other apps.',
@@ -87,7 +87,7 @@
         row('Total unread on the Dock icon', null, toggle('dockBadge', 'Total unread on the Dock icon')),
         row('Allow notifications from sites', 'Each group still asks for permission separately.', toggle('notifications', 'Allow notifications from sites'))),
       section('Updates'),
-      card(row('Update automatically', 'Updates install the next time you quit Bulkhead.', toggle('updates', 'Update automatically')))
+      card(row('Update automatically', 'Updates install the next time you quit Kavori.', toggle('updates', 'Update automatically')))
     ],
 
     groups: () => {
@@ -128,7 +128,7 @@
         big.className = 'tile tile-lg ' + g.color; big.textContent = UI.glyphOf(g.name);
         if (!nameField()) nameIn.value = g.name;
         swatches.forEach((s) => s.setAttribute('aria-pressed', String(s.classList.contains(g.color))));
-        stDesc.textContent = g.persistent ? 'Logins, cookies and cache are kept between launches.' : 'Everything is wiped when you quit Bulkhead.';
+        stDesc.textContent = g.persistent ? 'Logins, cookies and cache are kept between launches.' : 'Everything is wiped when you quit Kavori.';
         shortRow.textContent = 'Switch to ' + g.name;
         const i = S.groups.indexOf(g);
         numKbds.replaceChildren(i < 9 ? kbds(['⌘', String(i + 1)]) : h('span.num-note', 'No shortcut'));
@@ -246,7 +246,7 @@
       section('Compatibility'),
       card(
         row('User agent', null, select(() => [{ v: 'default', label: 'Default' }, { v: 'safari', label: 'Safari' }, { v: 'firefox', label: 'Firefox' }], () => S.settings.ua, (v) => set({ ua: v }))),
-        row('Hardware acceleration', 'Takes effect after you restart Bulkhead.', toggle('hw', 'Hardware acceleration'))),
+        row('Hardware acceleration', 'Takes effect after you restart Kavori.', toggle('hw', 'Hardware acceleration'))),
       section('Developer'),
       card(row('Web inspector', 'Adds Inspect Element to the page menu in every group.', toggle('devtools', 'Web inspector'))),
       section('About'),

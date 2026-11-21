@@ -1,4 +1,4 @@
-/* Shared helpers for every Bulkhead window (chrome, overlay, settings). */
+/* Shared helpers for every Kavori window (chrome, overlay, settings). */
 (function () {
   const ICONS = {
     back: '<path d="M14.5 6 8.5 12l6 6"/>',

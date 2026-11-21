@@ -3,7 +3,7 @@ const { app } = require('electron');
 const fs = require('fs');
 const path = require('path');
 
-const file = () => path.join(app.getPath('userData'), 'bulkhead-state.json');
+const file = () => path.join(app.getPath('userData'), 'kavori-state.json');
 
 const DEFAULTS = {
   groups: [],

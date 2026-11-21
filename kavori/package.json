@@ -1,6 +1,6 @@
 {
-  "name": "bulkhead",
-  "productName": "Bulkhead",
+  "name": "kavori",
+  "productName": "Kavori",
   "version": "0.1.0",
   "description": "One browser. Every account, kept apart.",
   "main": "src/main/main.js",
@@ -10,7 +10,7 @@
     "dist": "electron-builder --mac"
   },
   "build": {
-    "appId": "app.bulkhead.browser",
+    "appId": "app.kavori.browser",
     "mac": {
       "category": "public.app-category.productivity",
       "target": [

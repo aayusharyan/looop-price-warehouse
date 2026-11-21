@@ -1,6 +1,6 @@
-# Bulkhead
+# Kavori
 
-One browser. Every account, kept apart. A macOS app built from the Bulkhead / Porcelain design.
+One browser. Every account, kept apart. A macOS app built from the Kavori / Porcelain design.
 
 Each **group** is a sealed browser session (its own Electron `partition`): separate logins, cookies, storage and cache.
 Open the same site in three groups and stay signed in as three different people.
